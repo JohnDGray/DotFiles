@@ -1,11 +1,22 @@
 "don't try to maintain backward compatability with vi
 set nocompatible
 
+nnoremap h <NOP>
+nnoremap l <NOP>
+
+"add c include statement
+nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+
+"c program snippet
+nnoremap ,cpr :-1read $HOME/.vim/.skeleton.c <CR>4j
+"c for-loop snippet
+nnoremap ,clp :-1read $HOME/.vim/.cloop.c <CR>
+
 "tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
-"remind me not to go over 80 chars in a line
+"remind me not to go over 79 chars in a line
 set colorcolumn=80
 
 "make splitting more natural
@@ -36,14 +47,26 @@ set autoindent
 inoremap <NUL> <C-x><C-i>
 
 filetype plugin on
-"if v:version >= 700
-"    let OmniCpp_GlobalScopeSearch   = 1
-"    let OmniCpp_DisplayMode         = 1
-"    let OmniCpp_ShowPrototypeInAbbr = 1 "show prototype in pop-up
-"    let OmniCpp_ShowAccess          = 1 "show access in pop-up
-"    let OmniCpp_SelectFirstItem     = 1 "select first item in pop-up
-"    set completeopt=menuone,menu,longest
-"endif
+set omnifunc=syntaxcomplete#Complete
+autocmd CompleteDone * pclose
+set completeopt=longest,menuone
+function! Auto_complete_string()
+    if pumvisible()
+        return "\<C-n>"
+    else
+        return "\<C-x>\<C-o>\<C-r>=Auto_complete_opened()\<CR>"
+    end
+endfunction
+
+function! Auto_complete_opened()
+    if pumvisible()
+        return "\<Down>"
+    else
+        return "X\<bs>\<C-n>"
+    end
+endfunction
+
+inoremap <expr> <Nul> Auto_complete_string()
 
 if has("autocmd")
 	filetype plugin indent on
@@ -61,9 +84,6 @@ set foldlevelstart=20
 
 set path+=**
 set wildmenu
-
-"Generate tags for current directory and child directories
-command! MakeTags !ctags -R .
 
 "Search parent directories for tags as well
 set tags=./tags,tags;
