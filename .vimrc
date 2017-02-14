@@ -123,4 +123,16 @@ let g:netrw_liststyle=3
 nnoremap <Tab> :b 
 
 "shortcut tag jumps
-nnoremap <NUL> :sp<CR>g<C-]>
+nnoremap <NUL> :call TagJump()<CR>
+
+function! TagJump()
+    let oneMatch = (len(taglist(expand('<cword>'))) == 1)
+    sp
+    if oneMatch
+        exe "normal! g\<C-]>"
+        exe "normal! z\<CR>"
+        exe "normal! \<C-w>k"
+    else
+        exe "ts " . expand('<cword>')
+    endif
+endfunction
