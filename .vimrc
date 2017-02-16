@@ -1,8 +1,8 @@
 "don't try to maintain backward compatability with vi
 set nocompatible
 
-nnoremap h <NOP>
-nnoremap l <NOP>
+nnoremap hh <NOP>
+nnoremap ll <NOP>
 
 "add c include statement
 nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
