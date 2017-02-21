@@ -1,6 +1,8 @@
 "don't try to maintain backward compatability with vi
 set nocompatible
 
+let $BASH_ENV = "~/.bash_aliases"
+
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
@@ -11,6 +13,14 @@ nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 nnoremap ,cpr :-1read $HOME/.vim/.skeleton.c <CR>4j
 "c for-loop snippet
 nnoremap ,clp :-1read $HOME/.vim/.cloop.c <CR>
+
+nnoremap ,jii :exe JavaImplementInterface() <CR>
+
+function! JavaImplementInterface()
+    !python $HOME/bin/JavaImplementInterface.py %:p
+    -1read $HOME/bin/TEMPJAVINTFILE
+    !rm $HOME/bin/TEMPJAVINTFILE
+endfunction
 
 "tab stuff
 set tabstop=4
@@ -41,6 +51,7 @@ colorscheme gruvbox
 
 "show line numbers
 set number
+set relativenumber
 
 set autoindent
 
