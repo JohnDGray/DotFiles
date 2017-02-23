@@ -1,0 +1,4 @@
+ln ./vimrc ~/.vimrc
+ln ./bashrc ~/.bashrc
+ln ./tmux.conf ~/.tmux.conf
+
