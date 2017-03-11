@@ -27,7 +27,8 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 "remind me not to go over 79 chars in a line
-set colorcolumn=80
+"set colorcolumn=80
+match ErrorMsg '\%>80v.\+'
 
 "make splitting more natural
 set splitbelow
