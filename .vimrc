@@ -50,6 +50,8 @@ set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 
+hi Normal guibg=NONE ctermbg=NONE
+
 "show line numbers
 set number
 set relativenumber
@@ -132,7 +134,7 @@ let g:netrw_altv=1
 let g:netrw_liststyle=3 
 
 "quick access to files in buffer: just hammer tab
-nnoremap <Tab> :b 
+nnoremap <Tab> :b!
 
 "shortcut tag jumps
 nnoremap <NUL> :call TagJump()<CR>
