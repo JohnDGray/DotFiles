@@ -16,6 +16,8 @@ nnoremap ,clp :-1read $HOME/.vim/.cloop.c <CR>
 
 nnoremap ,jii :exe JavaImplementInterface() <CR>
 
+nnoremap ,html :-1read $HOME/.vim/.skeleton.html <CR>gg
+
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
     -1read $HOME/bin/TEMPJAVINTFILE
@@ -120,8 +122,13 @@ function! GetSearchString()
         let pref = "javascript+"
     elseif ext == "scm"
         let pref = "scheme+language+"
+    elseif ext == "html"
+        let pref = "MDN+\\<"
     endif
     let pref = "https://www.google.com/search?q=" . pref . "<cword>"
+    if ext == "html"
+        let pref = pref . "\\>"
+    endif
     return pref
 endfunction 
 

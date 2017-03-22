@@ -11,7 +11,7 @@ export SCALA_HOME="/usr/local/share/scala"
 export PATH="$SCALA_HOME/bin:$HOME/bin:$PATH"
 
 alias openPasswords='keepass2 ~/Documents/MyPasswordsSecondVersion/MyPasswords.kdbx'
-alias python=/usr/bin/python3.5
+alias python=/usr/bin/python3.4
 
 #alias tmux='tmux -2'
 
