@@ -6,19 +6,29 @@ let $BASH_ENV = "~/.bash_aliases"
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
+"bring next line up and merge with current line
 nnoremap ,l maj0i<SPACE><ESC>0dwkA<SPACE><DEL><ESC>`a
 
-"add c include statement
-autocmd FileType c nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+"skeletons
+autocmd FileType c nnoremap ,sk :-1read $HOME/.vim/.skeleton.c <CR>4j
+autocmd FileType java nnoremap ,sk :-1read $HOME/.vim/.skeleton.java 
+            \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
+autocmd FileType html nnoremap ,sk :-1read $HOME/.vim/.skeleton.html <CR>
 
-"c program snippet
-nnoremap ,cpr :-1read $HOME/.vim/.skeleton.c <CR>4j
+"c include statemen
+autocmd FileType c nnoremap ,inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+
 "c for-loop snippet
-nnoremap ,clp :-1read $HOME/.vim/.cloop.c <CR>
+autocmd FileType c nnoremap ,for :-1read $HOME/.vim/.cloop.c <CR>
 
-autocmd FileType java nnoremap ,jii :exe JavaImplementInterface() <CR>
+"html complete tag
+autocmd FileType html inoremap <c-f> ><ESC>F<yi<f>a</<ESC>pa><ESC>F<i
 
-autocmd FileType html nnoremap ,html :-1read $HOME/.vim/.skeleton.html <CR>gg
+"html align tags vertically and position cursor on line in between
+autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
+
+"java add interface skeletons
+autocmd FileType java nnoremap ,int :exe JavaImplementInterface() <CR>
 
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
