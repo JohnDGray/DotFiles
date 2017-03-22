@@ -6,17 +6,19 @@ let $BASH_ENV = "~/.bash_aliases"
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
+nnoremap ,l maj0i<SPACE><ESC>0dwkA<SPACE><DEL><ESC>`a
+
 "add c include statement
-nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+autocmd FileType c nnoremap ,cis ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 
 "c program snippet
 nnoremap ,cpr :-1read $HOME/.vim/.skeleton.c <CR>4j
 "c for-loop snippet
 nnoremap ,clp :-1read $HOME/.vim/.cloop.c <CR>
 
-nnoremap ,jii :exe JavaImplementInterface() <CR>
+autocmd FileType java nnoremap ,jii :exe JavaImplementInterface() <CR>
 
-nnoremap ,html :-1read $HOME/.vim/.skeleton.html <CR>gg
+autocmd FileType html nnoremap ,html :-1read $HOME/.vim/.skeleton.html <CR>gg
 
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
