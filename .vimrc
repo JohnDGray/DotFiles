@@ -6,6 +6,8 @@ let $BASH_ENV = "~/.bash_aliases"
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
+nnoremap ,r wbhmalcw<C-r>0<ESC>`al
+
 "bring next line up and merge with current line
 nnoremap ,l maj0i<SPACE><ESC>0dwkA<SPACE><DEL><ESC>`a
 
