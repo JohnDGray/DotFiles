@@ -5,6 +5,9 @@ export PS1
 
 export PATH=~/bin:"$PATH"
 
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 #set -o vi
 
 export SCALA_HOME="/usr/local/share/scala"
