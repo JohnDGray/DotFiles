@@ -44,12 +44,15 @@ function! JavaImplementInterface()
     !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
 
+"insert sql foreign key snippet
+autocmd FileType sql nnoremap ,fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
+
 "tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
 "remind me not to go over 79 chars in a line
-match ErrorMsg '\%>80v.\+'
+autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
 
 "make splitting more natural
 set splitbelow

@@ -10,11 +10,18 @@ export EDITOR="$VISUAL"
 
 #set -o vi
 
+alias pd="pushd +1" 
+alias begpr="cd $HOME/Documents/BowTieData/Modified; \
+             pushd $HOME/Documents/BowTieCode"
+
 export SCALA_HOME="/usr/local/share/scala"
 export PATH="$SCALA_HOME/bin:$HOME/bin:$PATH"
 
 alias openPasswords='keepass2 ~/Documents/MyPasswordsSecondVersion/MyPasswords.kdbx'
 alias python=/usr/bin/python3.5
+
+export BTC="${HOME}/Documents/BowTieCode"
+export BTD="${HOME}/Documents/BowTieData"
 
 #alias tmux='tmux -2'
 
