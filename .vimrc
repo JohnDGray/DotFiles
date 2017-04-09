@@ -1,6 +1,8 @@
 "don't try to maintain backward compatability with vi
 set nocompatible
 
+set scrolloff=9999
+
 let $BASH_ENV = "~/.bash_aliases"
 
 nnoremap hh <NOP>
