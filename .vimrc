@@ -1,13 +1,17 @@
 "don't try to maintain backward compatability with vi
 set nocompatible
 
+"keep cursor in the middle of the screen when possible
 set scrolloff=9999
 
+"use bash aliases so that python --> python3
 let $BASH_ENV = "~/.bash_aliases"
 
+"learn alternatives to h and l
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
+"replace work with what's in the register
 nnoremap ,r wbhmalcw<C-r>0<ESC>`al
 
 "bring next line up and merge with current line
@@ -19,7 +23,7 @@ autocmd FileType java nnoremap ,sk :-1read $HOME/.vim/.skeleton.java
             \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
 autocmd FileType html nnoremap ,sk :-1read $HOME/.vim/.skeleton.html <CR>
 
-"c include statemen
+"c include statement
 autocmd FileType c nnoremap ,inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 
 "c for-loop snippet
@@ -48,7 +52,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 "remind me not to go over 79 chars in a line
-"set colorcolumn=80
 autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
 
 "make splitting more natural
@@ -59,18 +62,17 @@ set splitright
 set laststatus=2
 set statusline+=%F
 
-"don't require save to navigate away from file in buffer
-"set hidden
+"highlight search matches as I type
+set incsearch
 
 "manage plugins
 execute pathogen#infect()
 
-"theme stuff
+"theme and syntax highlighting stuff
 syntax enable
 set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
-
 hi Normal guibg=NONE ctermbg=NONE
 
 "show line numbers
@@ -79,6 +81,7 @@ set relativenumber
 
 set autoindent
 
+"convenient completion
 inoremap <NUL> <C-x><C-i>
 
 filetype plugin on

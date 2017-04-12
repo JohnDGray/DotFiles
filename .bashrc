@@ -5,6 +5,9 @@ export PS1
 
 export PATH=~/bin:"$PATH"
 
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 #set -o vi
 
 alias pd="pushd +1" 
