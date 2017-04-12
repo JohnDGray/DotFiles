@@ -54,6 +54,9 @@ set expandtab
 "remind me not to go over 79 chars in a line
 autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
 
+"treat all numerals as decimal, even if prefixed with 0s
+set nrformats=
+
 "make splitting more natural
 set splitbelow
 set splitright
@@ -64,6 +67,10 @@ set statusline+=%F
 
 "highlight search matches as I type
 set incsearch
+"highlight all matches
+set hlsearch
+"remove highlighting easily
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 "manage plugins
 execute pathogen#infect()
