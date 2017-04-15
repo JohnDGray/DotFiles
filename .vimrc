@@ -84,7 +84,7 @@ hi Normal guibg=NONE ctermbg=NONE
 
 "show line numbers
 set number
-set relativenumber
+"set relativenumber
 
 set autoindent
 
