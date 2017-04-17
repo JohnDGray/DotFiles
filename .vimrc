@@ -30,7 +30,7 @@ autocmd FileType c nnoremap ,inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 autocmd FileType c nnoremap ,for :-1read $HOME/.vim/.cloop.c <CR>
 
 "html complete tag
-autocmd FileType html inoremap <c-f> ><ESC>F<yi<f>a</<ESC>pa><ESC>F<i
+autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
 
 "html align tags vertically and position cursor on line in between
 autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
