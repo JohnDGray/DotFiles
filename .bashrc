@@ -23,6 +23,8 @@ alias python=/usr/bin/python3.4
 export BTC="${HOME}/Documents/BowTieCode"
 export BTD="${HOME}/Documents/BowTieData"
 
+export PATH="/usr/vin/dot:$PATH"
+
 #alias tmux='tmux -2'
 
 if [ "$TERM" == "xterm" ]; then
