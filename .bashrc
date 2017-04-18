@@ -18,7 +18,7 @@ export SCALA_HOME="/usr/local/share/scala"
 export PATH="$SCALA_HOME/bin:$HOME/bin:$PATH"
 
 alias openPasswords='keepass2 ~/Documents/MyPasswordsSecondVersion/MyPasswords.kdbx'
-alias python=/usr/bin/python3.4
+alias python=python3
 
 export BTC="${HOME}/Documents/BowTieCode"
 export BTD="${HOME}/Documents/BowTieData"
