@@ -1,4 +1,4 @@
-"don't try to maintain backward compatability with vi
+"d't try to maintain backward compatability with vi
 set nocompatible
 
 "keep cursor in the middle of the screen when possible
@@ -11,16 +11,25 @@ let $BASH_ENV = "~/.bash_aliases"
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
-"replace work with what's in the register
+"replace word with what's in the register
 nnoremap ,r wbhmalcw<C-r>0<ESC>`al
 
-"bring next line up and merge with current line
-nnoremap ,l maj0i<SPACE><ESC>0dwkA<SPACE><DEL><ESC>`a
+autocmd FileType sql vnoremap ,cm :norm i--<CR>
+autocmd FileType sql nnoremap ,cm ma<ESC>0<ESC>i--<ESC>`a
+autocmd FileType python vnoremap ,cm :norm i#<CR>
+autocmd FileType python nnoremap ,cm ma<ESC>0<ESC>i#<ESC>`a
+autocmd FileType java,javascript,c vnoremap ,cm :norm i//<CR>
+autocmd FileType java,javascript,c nnoremap ,cm ma<ESC>0<ESC>i//<ESC>`a
+
+autocmd FileType sql,java,javascript,c vnoremap ,uc :norm xx<CR>
+autocmd FileType sql,java,javascript,c nnoremap ,uc ma<ESC>0<ESC>xx<ESC>`a
+autocmd FileType python vnoremap ,uc :norm x<CR>
+autocmd FileType python nnoremap ,uc ma<ESC>0<ESC>x<ESC>`a
 
 "skeletons
 autocmd FileType c nnoremap ,sk :-1read $HOME/.vim/.skeleton.c <CR>4j
 autocmd FileType java nnoremap ,sk :-1read $HOME/.vim/.skeleton.java 
-            \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
+     \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
 autocmd FileType html nnoremap ,sk :-1read $HOME/.vim/.skeleton.html <CR>
 
 "c include statement
