@@ -1,5 +1,7 @@
-"d't try to maintain backward compatability with vi
+"don't try to maintain backward compatability with vi
 set nocompatible
+
+let mapleader = "\<SPACE>"
 
 "keep cursor in the middle of the screen when possible
 set scrolloff=9999
@@ -12,31 +14,33 @@ nnoremap hh <NOP>
 nnoremap ll <NOP>
 
 "replace word with what's in the register
-nnoremap ,r wbhmalcw<C-r>0<ESC>`al
+nnoremap <leader>r wbhmalcw<C-r>0<ESC>`al
 
-autocmd FileType sql vnoremap ,cm :norm i--<CR>
-autocmd FileType sql nnoremap ,cm ma<ESC>0<ESC>i--<ESC>`a
-autocmd FileType python vnoremap ,cm :norm i#<CR>
-autocmd FileType python nnoremap ,cm ma<ESC>0<ESC>i#<ESC>`a
-autocmd FileType java,javascript,c vnoremap ,cm :norm i//<CR>
-autocmd FileType java,javascript,c nnoremap ,cm ma<ESC>0<ESC>i//<ESC>`a
+"comment quickly with <leader>cm
+autocmd FileType sql vnoremap <leader>cm :norm i--<CR>
+autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a
+autocmd FileType python vnoremap <leader>cm :norm i#<CR>
+autocmd FileType python nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
+autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>
+autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a
 
-autocmd FileType sql,java,javascript,c vnoremap ,uc :norm xx<CR>
-autocmd FileType sql,java,javascript,c nnoremap ,uc ma<ESC>0<ESC>xx<ESC>`a
-autocmd FileType python vnoremap ,uc :norm x<CR>
-autocmd FileType python nnoremap ,uc ma<ESC>0<ESC>x<ESC>`a
+"uncomment quickly with <leader>uc
+autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
+autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
+autocmd FileType python vnoremap <leader>uc :norm x<CR>
+autocmd FileType python nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
 
 "skeletons
-autocmd FileType c nnoremap ,sk :-1read $HOME/.vim/.skeleton.c <CR>4j
-autocmd FileType java nnoremap ,sk :-1read $HOME/.vim/.skeleton.java 
+autocmd FileType c nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
+autocmd FileType java nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.java 
      \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
-autocmd FileType html nnoremap ,sk :-1read $HOME/.vim/.skeleton.html <CR>
+autocmd FileType html nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
 
 "c include statement
-autocmd FileType c nnoremap ,inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+autocmd FileType c nnoremap <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 
 "c for-loop snippet
-autocmd FileType c nnoremap ,for :-1read $HOME/.vim/.cloop.c <CR>
+autocmd FileType c nnoremap <leader>for :-1read $HOME/.vim/.cloop.c <CR>
 
 "html complete tag
 autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
@@ -45,7 +49,7 @@ autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
 autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
 
 "java add interface skeletons
-autocmd FileType java nnoremap ,int :exe JavaImplementInterface() <CR>
+autocmd FileType java nnoremap <leader>int :exe JavaImplementInterface() <CR>
 
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
@@ -54,7 +58,7 @@ function! JavaImplementInterface()
 endfunction
 
 "insert sql foreign key snippet
-autocmd FileType sql nnoremap ,fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
+autocmd FileType sql nnoremap <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
 
 "tab stuff
 set tabstop=4
