@@ -9,26 +9,42 @@ set scrolloff=9999
 "use bash aliases so that python --> python3
 let $BASH_ENV = "~/.bash_aliases"
 
-"learn alternatives to h and l
+let g:pymode_python = 'python3'
+
+"don't use h or l repeatedly
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
-"replace word with what's in the register
-nnoremap <leader>r wbhmalcw<C-r>0<ESC>`al
+"easier moving of code blocks
+vnoremap < <gv
+vnoremap > >gv
+
+"replace word with what's in the 0 register
+nnoremap <leader>rep ciw<C-r>0<ESC>
+nnoremap <leader>Rep ciW<C-r>0<ESC>
+"replace highlighted text with what's in the 0 register
+vnoremap <leader>rep c<C-r>0<ESC>
+
+"capitalize word
+nnoremap <leader>cap maviwgU`a
+nnoremap <leader>Cap maviWgU`a
+
+"run program
+autocmd FileType python nnoremap <leader>run :!python %<CR>
 
 "comment quickly with <leader>cm
 autocmd FileType sql vnoremap <leader>cm :norm i--<CR>
 autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a
-autocmd FileType python vnoremap <leader>cm :norm i#<CR>
-autocmd FileType python nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
+autocmd FileType python,sh vnoremap <leader>cm :norm i#<CR>
+autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
 autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>
 autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a
 
 "uncomment quickly with <leader>uc
 autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
 autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
-autocmd FileType python vnoremap <leader>uc :norm x<CR>
-autocmd FileType python nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
+autocmd FileType python,sh vnoremap <leader>uc :norm x<CR>
+autocmd FileType python,sh nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
 
 "skeletons
 autocmd FileType c nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
@@ -46,7 +62,10 @@ autocmd FileType c nnoremap <leader>for :-1read $HOME/.vim/.cloop.c <CR>
 autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
 
 "html align tags vertically and position cursor on line in between
-autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
+"autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
+
+"html align tags vertically and position cursor on line in between
+autocmd FileType html inoremap <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
 
 "java add interface skeletons
 autocmd FileType java nnoremap <leader>int :exe JavaImplementInterface() <CR>
@@ -81,7 +100,7 @@ set statusline+=%F
 "highlight search matches as I type
 set incsearch
 "highlight all matches
-set hlsearch
+"set hlsearch
 "remove highlighting easily
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
@@ -104,7 +123,7 @@ set autoindent
 "convenient completion
 inoremap <NUL> <C-x><C-i>
 
-filetype plugin on
+filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
 autocmd CompleteDone * pclose
 set completeopt=longest,menuone
@@ -140,11 +159,21 @@ set foldnestmax=1
 "don't show folds initially
 set foldlevelstart=20   
 
+"search down into subfolders
+"provides tab-completion for all file-related tasks
 set path+=**
+
+"display all matching files when we tab complete
 set wildmenu
+
+"Create the 'tags' file (install ctags first)
+command! MakeTags !ctags -R .
 
 "Search parent directories for tags as well
 set tags=./tags,tags;
+
+"Google word shortcut
+nnoremap <leader>go :Google<CR>
 
 "Google word under cursor along with name of current language
 command! Google let ss = GetSearchString() | execute '!firefox ' . ss
