@@ -3,13 +3,14 @@ set nocompatible
 
 let mapleader = "\<SPACE>"
 
+"leave buffers without saving
+set hidden
+
 "keep cursor in the middle of the screen when possible
 set scrolloff=9999
 
 "use bash aliases so that python --> python3
 let $BASH_ENV = "~/.bash_aliases"
-
-let g:pymode_python = 'python3'
 
 "don't use h or l repeatedly
 nnoremap hh <NOP>
@@ -211,8 +212,28 @@ let g:netrw_altv=1
 "use tree view
 let g:netrw_liststyle=3 
 
-"quick access to files in buffer: just hammer tab
-nnoremap <Tab> :b!
+"quick access to buffers
+nnoremap <leader>o :edit 
+nnoremap <silent> <leader>q :call CloseAllBuffersButCurrent(0)<CR>
+nnoremap <silent> <leader>q! :call CloseAllBuffersButCurrent(1)<CR>
+nnoremap <TAB> :bnext<CR>
+nnoremap <S-TAB> :bprev<CR> 
+
+function! CloseAllBuffersButCurrent(force)
+    let curr = bufnr("%")
+    let i = bufnr("$")
+    let cmd = "bd"
+    if a:force
+        let cmd = cmd."!"
+    endif
+    while i >= 1
+        if curr != i && buflisted(i)
+            exe "".cmd.i
+        endif
+        let i-=1
+    endwhile
+    exe "ls"
+endfunction
 
 "shortcut tag jumps
 nnoremap <NUL> :call TagJump()<CR>

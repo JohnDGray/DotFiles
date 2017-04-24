@@ -12,7 +12,10 @@ export EDITOR="$VISUAL"
 
 alias pd="pushd +1" 
 alias begpr="cd $HOME/Documents/BowTieData/Modified; \
-             pushd $HOME/Documents/BowTieCode"
+             pushd $HOME/Documents/BowTieCode/SQL; \
+             pushd $HOME/Documents/BowTieCode/SQL/Reports; \
+             pushd $HOME/dotfiles; \
+             pushd $HOME/Documents/BowTieCode;"
 
 export SCALA_HOME="/usr/local/share/scala"
 export PATH="$SCALA_HOME/bin:$HOME/bin:$PATH"
