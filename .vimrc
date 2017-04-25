@@ -214,11 +214,11 @@ let g:netrw_banner=0
 "open splits to the right
 let g:netrw_altv=1    
 "use tree view
-let g:netrw_liststyle=3 
+let g:netrw_liststyle=4
 
 "quick access to buffers
-nnoremap <silent> <leader>q :call CloseAllBuffersButCurrent(0)<CR>
-nnoremap <silent> <leader>q! :call CloseAllBuffersButCurrent(1)<CR>
+nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
+nnoremap <silent> <leader>bo! :call CloseAllBuffersButCurrent(1)<CR>
 nnoremap <TAB> :bnext<CR>
 nnoremap <S-TAB> :bprev<CR> 
 
