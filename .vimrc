@@ -30,8 +30,11 @@ vnoremap <leader>rep c<C-r>0<ESC>
 nnoremap <leader>cap maviwgU`a
 nnoremap <leader>Cap maviWgU`a
 
-"run program
+"run python program
 autocmd FileType python nnoremap <leader>run :!python %<CR>
+
+"reload html page
+autocmd FileType html nnoremap <leader>rf :!firefox %<CR>
 
 "comment quickly with <leader>cm
 autocmd FileType sql vnoremap <leader>cm :norm i--<CR>
@@ -114,6 +117,7 @@ set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
+set cursorline
 
 "show line numbers
 set number
@@ -213,7 +217,6 @@ let g:netrw_altv=1
 let g:netrw_liststyle=3 
 
 "quick access to buffers
-nnoremap <leader>o :edit 
 nnoremap <silent> <leader>q :call CloseAllBuffersButCurrent(0)<CR>
 nnoremap <silent> <leader>q! :call CloseAllBuffersButCurrent(1)<CR>
 nnoremap <TAB> :bnext<CR>
