@@ -220,20 +220,20 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 function! ToggleNetrw()
-    if (&ft == 'netrw')
+    let i = bufnr("$")
+    if (expand('&ft') == 'netrw')
         :bd
     else
-        let Lex = 1
-        let i = bufnr("$")
+        "let i = bufnr("$")
         while (i >= 1)
-            if (getbufvar(i, '&filetype') == 'netrw')
+            if (getbufvar(1, '&filetype') == 'netrw')
                 exe "bd".i
                 return 0
             endif
-            let i-=1
+            i-=1
         endwhile
-        :Lexplore
     endif
+    :Lexplore
 endfunction
 
 "quick access to buffers
