@@ -6,6 +6,9 @@ let mapleader = "\<SPACE>"
 "leave buffers without saving
 set hidden
 
+"don't redraw in macros
+set lazyredraw
+
 "keep cursor in the middle of the screen when possible
 set scrolloff=9999
 
