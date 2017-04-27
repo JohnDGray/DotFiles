@@ -9,7 +9,7 @@ set hidden
 "keep cursor in the middle of the screen when possible
 set scrolloff=9999
 
-"use bash aliases so that python --> python3
+"use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
 
 "don't use h or l repeatedly
@@ -30,14 +30,11 @@ vnoremap <leader>rep c<C-r>0<ESC>
 nnoremap <leader>cap maviwgU`a
 nnoremap <leader>Cap maviWgU`a
 
-
-
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
     -1read $HOME/bin/TEMPJAVINTFILE
     !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
-
 
 "tab stuff
 set tabstop=4
@@ -132,11 +129,11 @@ set tags=./tags,tags;
 nnoremap <leader>go :Google<CR>
 
 "Google word under cursor along with name of current language
-command! Google let ss = GetSearchString() | execute '!firefox ' . ss
+command! Google let ss = GetSearchString() | execute "!firefox " . ss
 
 function! GetSearchString()
     let pref = ""
-    let ext = expand('%:e')
+    let ext = expand("%:e")
     if ext == "py"
         let pref = "python+"
     elseif ext == "c"
@@ -170,13 +167,13 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 function! ToggleNetrw()
-    if (&ft == 'netrw')
+    if (&ft == "netrw")
         :bd
     else
         let Lex = 1
         let i = bufnr("$")
         while (i >= 1)
-            if (getbufvar(i, '&filetype') == 'netrw')
+            if (getbufvar(i, "&filetype") == "netrw")
                 exe "bd".i
                 return 0
             endif
@@ -212,14 +209,14 @@ endfunction
 nnoremap <NUL> :call TagJump()<CR>
 
 function! TagJump()
-    let oneMatch = (len(taglist(expand('<cword>'))) == 1)
+    let oneMatch = (len(taglist(expand("<cword>"))) == 1)
     sp
     if oneMatch
         exe "normal! g\<C-]>"
         exe "normal! z\<CR>"
         exe "normal! \<C-w>k"
     else
-        exe "ts " . expand('<cword>')
+        exe "ts " . expand("<cword>")
     endif
 endfunction
 
@@ -234,19 +231,19 @@ augroup MyAutocmds
 
     "comment quickly with <leader>cm
     autocmd FileType sql vnoremap <leader>cm :norm i--<CR>gv
-    autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a
+    autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a2l
     autocmd FileType python,sh vnoremap <leader>cm :norm i#<CR>gv
-    autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
+    autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`al
     autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>gv
-    autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a
+    autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a2l
 
     "uncomment quickly with <leader>uc
-    autocmd FileType sql vnoremap <leader>uc :s/^--//<CR>gv
-    autocmd FileType sql nnoremap <leader>uc ma:s/^--//<CR>`a
-    autocmd FileType java,javascript,c vnoremap <leader>uc :s/^\/\///<CR>gv
-    autocmd FileType java,javascript,c nnoremap <leader>uc ma:s/^\/\///<CR>`a
-    autocmd FileType python,sh  vnoremap <leader>uc :s/^#//<CR>gv
-    autocmd FileType python,sh  nnoremap <leader>uc ma:s/^#//<CR>`a
+    autocmd FileType sql vnoremap <leader>uc :s/^\(\s*\)--/\1/<CR>gv
+    autocmd FileType sql nnoremap <leader>uc ma:s/^\(\s*\)--/\1/<CR>`a2h
+    autocmd FileType java,javascript,c vnoremap <leader>uc :s/^\(\s*\)\/\\1///<CR>gv
+    autocmd FileType java,javascript,c nnoremap <leader>uc ma:s/^\(\s*\)\/\\1///<CR>`a2h
+    autocmd FileType python,sh  vnoremap <leader>uc :s/^\(\s*\)#/\1/<CR>gv
+    autocmd FileType python,sh  nnoremap <leader>uc ma:s/^\(\s*\)#/\1/<CR>`ah
 
     "autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
     "autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
@@ -281,7 +278,7 @@ augroup MyAutocmds
     autocmd CompleteDone * pclose
 
     "remind me not to go over 79 chars in a line
-    autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
+    autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg "\%>80v.\+"
 
     "fold by indentation for python
     autocmd FileType python setlocal foldmethod=indent
