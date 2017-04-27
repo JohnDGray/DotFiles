@@ -227,55 +227,55 @@ augroup MyAutocmds
     au!
 
     "run python program
-    autocmd FileType python nnoremap <leader>run :!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
 
     "reload html page
-    autocmd FileType html nnoremap <leader>rf :!firefox %<CR>
+    autocmd FileType html nnoremap <buffer> <leader>rf :!firefox %<CR>
 
     "comment quickly with <leader>cm
-    autocmd FileType sql vnoremap <leader>cm :norm i--<CR>gv
-    autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a2l
-    autocmd FileType python,sh vnoremap <leader>cm :norm i#<CR>gv
-    autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`al
-    autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>gv
-    autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a2l
+    autocmd FileType sql vnoremap <buffer> <leader>cm :norm i--<CR>gv
+    autocmd FileType sql nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i--<ESC>`a2l
+    autocmd FileType python,sh vnoremap <buffer> <leader>cm :norm i#<CR>gv
+    autocmd FileType python,sh nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i#<ESC>`al
+    autocmd FileType java,javascript,c vnoremap <buffer> <leader>cm :norm i//<CR>gv
+    autocmd FileType java,javascript,c nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i//<ESC>`a2l
 
     "uncomment quickly with <leader>uc
-    autocmd FileType sql vnoremap <leader>uc :s/^\(\s*\)--/\1/<CR>gv
-    autocmd FileType sql nnoremap <leader>uc ma:s/^\(\s*\)--/\1/<CR>`a2h
-    autocmd FileType java,javascript,c vnoremap <leader>uc :s/^\(\s*\)\/\\1///<CR>gv
-    autocmd FileType java,javascript,c nnoremap <leader>uc ma:s/^\(\s*\)\/\\1///<CR>`a2h
-    autocmd FileType python,sh  vnoremap <leader>uc :s/^\(\s*\)#/\1/<CR>gv
-    autocmd FileType python,sh  nnoremap <leader>uc ma:s/^\(\s*\)#/\1/<CR>`ah
+    autocmd FileType sql vnoremap <buffer> <leader>uc :s/^\(\s*\)--/\1/<CR>gv
+    autocmd FileType sql nnoremap <buffer> <leader>uc ma:s/^\(\s*\)--/\1/<CR>`a2h
+    autocmd FileType java,javascript,c vnoremap <buffer> <leader>uc :s/^\(\s*\)\/\\1///<CR>gv
+    autocmd FileType java,javascript,c nnoremap <buffer> <leader>uc ma:s/^\(\s*\)\/\\1///<CR>`a2h
+    autocmd FileType python,sh  vnoremap <buffer> <leader>uc :s/^\(\s*\)#/\1/<CR>gv
+    autocmd FileType python,sh  nnoremap <buffer> <leader>uc ma:s/^\(\s*\)#/\1/<CR>`ah
 
-    "autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
-    "autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
-    "autocmd FileType python,sh vnoremap <leader>uc :norm x<CR>
-    "autocmd FileType python,sh nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
+    "autocmd FileType sql,java,javascript,c vnoremap <buffer> <leader>uc :norm xx<CR>
+    "autocmd FileType sql,java,javascript,c nnoremap <buffer> <leader>uc ma<ESC>0<ESC>xx<ESC>`a
+    "autocmd FileType python,sh vnoremap <buffer> <leader>uc :norm x<CR>
+    "autocmd FileType python,sh nnoremap <buffer> <leader>uc ma<ESC>0<ESC>x<ESC>`a
 
     "skeletons
-    autocmd FileType c nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
-    autocmd FileType java nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.java 
+    autocmd FileType c nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
+    autocmd FileType java nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.java 
          \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
-    autocmd FileType html nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
+    autocmd FileType html nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
 
     "c include statement
-    autocmd FileType c nnoremap <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+    autocmd FileType c nnoremap <buffer> <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
 
     "c for-loop snippet
-    autocmd FileType c nnoremap <leader>for :-1read $HOME/.vim/.cloop.c <CR>
+    autocmd FileType c nnoremap <buffer> <leader>for :-1read $HOME/.vim/.cloop.c <CR>
 
     "html complete tag
-    autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
+    autocmd FileType html inoremap <buffer> <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
 
     "html align tags vertically and position cursor on line in between
-    autocmd FileType html inoremap <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
+    autocmd FileType html inoremap <buffer> <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
 
     "java add interface skeletons
-    autocmd FileType java nnoremap <leader>int :exe JavaImplementInterface() <CR>
+    autocmd FileType java nnoremap <buffer> <leader>int :exe JavaImplementInterface() <CR>
 
     "insert sql foreign key snippet
-    autocmd FileType sql nnoremap <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
+    autocmd FileType sql nnoremap <buffer> <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
