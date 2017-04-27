@@ -30,49 +30,7 @@ vnoremap <leader>rep c<C-r>0<ESC>
 nnoremap <leader>cap maviwgU`a
 nnoremap <leader>Cap maviWgU`a
 
-"run python program
-autocmd FileType python nnoremap <leader>run :!python %<CR>
 
-"reload html page
-autocmd FileType html nnoremap <leader>rf :!firefox %<CR>
-
-"comment quickly with <leader>cm
-autocmd FileType sql vnoremap <leader>cm :norm i--<CR>
-autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a
-autocmd FileType python,sh vnoremap <leader>cm :norm i#<CR>
-autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
-autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>
-autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a
-
-"uncomment quickly with <leader>uc
-autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
-autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
-autocmd FileType python,sh vnoremap <leader>uc :norm x<CR>
-autocmd FileType python,sh nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
-
-"skeletons
-autocmd FileType c nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
-autocmd FileType java nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.java 
-     \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
-autocmd FileType html nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
-
-"c include statement
-autocmd FileType c nnoremap <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
-
-"c for-loop snippet
-autocmd FileType c nnoremap <leader>for :-1read $HOME/.vim/.cloop.c <CR>
-
-"html complete tag
-autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
-
-"html align tags vertically and position cursor on line in between
-"autocmd FileType html inoremap <c-n> <CR><SPACE><CR><ESC>wki<TAB>
-
-"html align tags vertically and position cursor on line in between
-autocmd FileType html inoremap <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
-
-"java add interface skeletons
-autocmd FileType java nnoremap <leader>int :exe JavaImplementInterface() <CR>
 
 function! JavaImplementInterface()
     !python $HOME/bin/JavaImplementInterface.py %:p
@@ -80,15 +38,11 @@ function! JavaImplementInterface()
     !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
 
-"insert sql foreign key snippet
-autocmd FileType sql nnoremap <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
 
 "tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
-"remind me not to go over 79 chars in a line
-autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
 
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
@@ -130,7 +84,6 @@ inoremap <NUL> <C-x><C-i>
 
 filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
-autocmd CompleteDone * pclose
 set completeopt=longest,menuone
 function! Auto_complete_string()
     if pumvisible()
@@ -156,8 +109,6 @@ endif
 
 "fold using syntax normally
 set foldmethod=syntax
-"but fold by indentation for python
-autocmd FileType python setlocal foldmethod=indent
 
 "only one level of folding
 set foldnestmax=1       
@@ -210,7 +161,6 @@ endfunction
 
 "file navigation with netrw
 "quick toggle
-"autocmd leType netrw nnoremap <leader>ee :Lexplore<CR>
 nnoremap <leader>ee :call ToggleNetrw()<CR>
 "disable banner
 let g:netrw_banner=0   
@@ -258,7 +208,7 @@ function! CloseAllBuffersButCurrent(force)
     exe "ls"
 endfunction
 
-"shortcut tag jumps
+"shortcut: <C-SPACE> for tag jumps
 nnoremap <NUL> :call TagJump()<CR>
 
 function! TagJump()
@@ -272,3 +222,68 @@ function! TagJump()
         exe "ts " . expand('<cword>')
     endif
 endfunction
+
+augroup MyAutocmds
+    au!
+
+    "run python program
+    autocmd FileType python nnoremap <leader>run :!python %<CR>
+
+    "reload html page
+    autocmd FileType html nnoremap <leader>rf :!firefox %<CR>
+
+    "comment quickly with <leader>cm
+    autocmd FileType sql vnoremap <leader>cm :norm i--<CR>gv
+    autocmd FileType sql nnoremap <leader>cm ma<ESC>0<ESC>i--<ESC>`a
+    autocmd FileType python,sh vnoremap <leader>cm :norm i#<CR>gv
+    autocmd FileType python,sh nnoremap <leader>cm ma<ESC>0<ESC>i#<ESC>`a
+    autocmd FileType java,javascript,c vnoremap <leader>cm :norm i//<CR>gv
+    autocmd FileType java,javascript,c nnoremap <leader>cm ma<ESC>0<ESC>i//<ESC>`a
+
+    "uncomment quickly with <leader>uc
+    autocmd FileType sql vnoremap <leader>uc :s/^--//<CR>gv
+    autocmd FileType sql nnoremap <leader>uc ma:s/^--//<CR>`a
+    autocmd FileType java,javascript,c vnoremap <leader>uc :s/^\/\///<CR>gv
+    autocmd FileType java,javascript,c nnoremap <leader>uc ma:s/^\/\///<CR>`a
+    autocmd FileType python,sh  vnoremap <leader>uc :s/^#//<CR>gv
+    autocmd FileType python,sh  nnoremap <leader>uc ma:s/^#//<CR>`a
+
+    "autocmd FileType sql,java,javascript,c vnoremap <leader>uc :norm xx<CR>
+    "autocmd FileType sql,java,javascript,c nnoremap <leader>uc ma<ESC>0<ESC>xx<ESC>`a
+    "autocmd FileType python,sh vnoremap <leader>uc :norm x<CR>
+    "autocmd FileType python,sh nnoremap <leader>uc ma<ESC>0<ESC>x<ESC>`a
+
+    "skeletons
+    autocmd FileType c nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
+    autocmd FileType java nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.java 
+         \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
+    autocmd FileType html nnoremap <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
+
+    "c include statement
+    autocmd FileType c nnoremap <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
+
+    "c for-loop snippet
+    autocmd FileType c nnoremap <leader>for :-1read $HOME/.vim/.cloop.c <CR>
+
+    "html complete tag
+    autocmd FileType html inoremap <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
+
+    "html align tags vertically and position cursor on line in between
+    autocmd FileType html inoremap <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
+
+    "java add interface skeletons
+    autocmd FileType java nnoremap <leader>int :exe JavaImplementInterface() <CR>
+
+    "insert sql foreign key snippet
+    autocmd FileType sql nnoremap <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
+
+    "remove preview window after auto-completion
+    autocmd CompleteDone * pclose
+
+    "remind me not to go over 79 chars in a line
+    autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg '\%>80v.\+'
+
+    "fold by indentation for python
+    autocmd FileType python setlocal foldmethod=indent
+
+augroup END
