@@ -1,6 +1,3 @@
-"don't try to maintain backward compatability with vi
-set nocompatible
-
 let mapleader = "\<SPACE>"
 
 "leave buffers without saving
@@ -19,25 +16,19 @@ let $BASH_ENV = "~/.bash_aliases"
 nnoremap hh <NOP>
 nnoremap ll <NOP>
 
-"easier moving of code blocks
+"easier (un)indenting of code blocks
 vnoremap < <gv
 vnoremap > >gv
 
-"replace word with what's in the 0 register
+"replace word with whatever is in the 0 register
 nnoremap <leader>rep ciw<C-r>0<ESC>
 nnoremap <leader>Rep ciW<C-r>0<ESC>
-"replace highlighted text with what's in the 0 register
+"replace highlighted text with whatever is in the 0 register
 vnoremap <leader>rep c<C-r>0<ESC>
 
-"capitalize word
+"capitalize last word
 nnoremap <leader>cap maviwgU`a
 nnoremap <leader>Cap maviWgU`a
-
-function! JavaImplementInterface()
-    !python $HOME/bin/JavaImplementInterface.py %:p
-    -1read $HOME/bin/TEMPJAVINTFILE
-    !rm $HOME/bin/TEMPJAVINTFILE
-endfunction
 
 "tab stuff
 set tabstop=4
@@ -60,14 +51,14 @@ set incsearch
 "highlight all matches
 "set hlsearch
 "remove highlighting easily
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+"nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 "manage plugins
 execute pathogen#infect()
 
 "theme and syntax highlighting stuff
 syntax enable
-set background=dark
+"set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
@@ -103,10 +94,6 @@ endfunction
 
 inoremap <expr> <Nul> Auto_complete_string()
 
-if has("autocmd")
-	filetype plugin indent on
-endif
-
 "fold using syntax normally
 set foldmethod=syntax
 
@@ -137,20 +124,20 @@ command! Google let ss = GetSearchString() | execute "!firefox " . ss
 function! GetSearchString()
     let pref = ""
     let ext = expand("%:e")
-    if ext == "py"
+    if (&ft == "python")
         let pref = "python+"
-    elseif ext == "c"
+    elseif (&ft == "c")
         let pref = "c+"
-    elseif ext == "sh"
-        let pref = "bash+"
-    elseif ext == "java"
+    elseif (&ft == "sh")
+        let pref = "shell+"
+    elseif (&ft == "java")
         let pref = "java+"
-    elseif ext == "js"
+    elseif (&ft == "javascript")
         let pref = "javascript+"
-    elseif ext == "scm"
+    elseif (&ft == "scheme")
         let pref = "scheme+language+"
-    elseif ext == "html"
-        let pref = "MDN+\\<"
+    elseif (&ft == "html")
+        let pref = "html+\\<"
     endif
     let pref = "https://www.google.com/search?q=" . pref . "<cword>"
     if ext == "html"
@@ -164,8 +151,6 @@ endfunction
 nnoremap <leader>ee :call ToggleNetrw()<CR>
 "disable banner
 let g:netrw_banner=0   
-"open splits to the right
-"let g:netrw_altv=1    
 "use tree view
 let g:netrw_liststyle=3
 
@@ -221,6 +206,12 @@ function! TagJump()
     else
         exe "ts " . expand("<cword>")
     endif
+endfunction
+
+function! JavaImplementInterface()
+    !python $HOME/bin/JavaImplementInterface.py %:p
+    -1read $HOME/bin/TEMPJAVINTFILE
+    !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
 
 augroup MyAutocmds
