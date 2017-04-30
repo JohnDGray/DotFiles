@@ -58,7 +58,7 @@ execute pathogen#infect()
 
 "theme and syntax highlighting stuff
 syntax enable
-"set background=dark
+set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
@@ -116,34 +116,37 @@ command! MakeTags !ctags -R .
 set tags=./tags,tags;
 
 "Google word shortcut
-nnoremap <leader>go :Google<CR>
+nnoremap <leader>go :call Google(0)<CR>
+vnoremap <leader>go "ay :call Google(1)<CR>
 
-"Google word under cursor along with name of current language
-command! Google let ss = GetSearchString() | execute "!firefox " . ss
+function! Google(visual)
+    let ss = GetLanguage()
+    if (&ft == "html")
+        let ss = ss . "\\<"
+    endif
+    if a:visual
+        let text = join(split(@a), "+")
+        let ss = ss . text
+    else
+        let ss = ss . "<cword>"
+    endif
+    if (&ft == "html")
+        let ss = ss . "\\>"
+    endif
+    exe "!firefox " . "https://www.google.com/search?q=" . ss
+endfunction
 
-function! GetSearchString()
-    let pref = ""
-    let ext = expand("%:e")
-    if (&ft == "python")
-        let pref = "python+"
-    elseif (&ft == "c")
-        let pref = "c+"
-    elseif (&ft == "sh")
-        let pref = "shell+"
-    elseif (&ft == "java")
-        let pref = "java+"
-    elseif (&ft == "javascript")
-        let pref = "javascript+"
-    elseif (&ft == "scheme")
-        let pref = "scheme+language+"
-    elseif (&ft == "html")
-        let pref = "html+\\<"
+function! GetLanguage()
+    let result = ""
+    if (&ft == "sh")
+        let result = "bash"
+    else
+        let result = "" . &ft
     endif
-    let pref = "https://www.google.com/search?q=" . pref . "<cword>"
-    if ext == "html"
-        let pref = pref . "\\>"
+    if result != ""
+        let result = result . "+"
     endif
-    return pref
+    return result
 endfunction 
 
 "file navigation with netrw
@@ -238,11 +241,6 @@ augroup MyAutocmds
     autocmd FileType java,javascript,c nnoremap <buffer> <leader>uc ma:s/^\(\s*\)\/\\1///<CR>`a2h
     autocmd FileType python,sh  vnoremap <buffer> <leader>uc :s/^\(\s*\)#/\1/<CR>gv
     autocmd FileType python,sh  nnoremap <buffer> <leader>uc ma:s/^\(\s*\)#/\1/<CR>`ah
-
-    "autocmd FileType sql,java,javascript,c vnoremap <buffer> <leader>uc :norm xx<CR>
-    "autocmd FileType sql,java,javascript,c nnoremap <buffer> <leader>uc ma<ESC>0<ESC>xx<ESC>`a
-    "autocmd FileType python,sh vnoremap <buffer> <leader>uc :norm x<CR>
-    "autocmd FileType python,sh nnoremap <buffer> <leader>uc ma<ESC>0<ESC>x<ESC>`a
 
     "skeletons
     autocmd FileType c nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
