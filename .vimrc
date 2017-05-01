@@ -68,12 +68,13 @@ set cursorline
 set number
 "set relativenumber
 
+"indent at same level as last line
 set autoindent
 
 "convenient completion
 inoremap <NUL> <C-x><C-i>
 
-filetype plugin indent on
+filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 set completeopt=longest,menuone
 function! Auto_complete_string()
