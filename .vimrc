@@ -20,6 +20,12 @@ nnoremap ll <NOP>
 vnoremap < <gv
 vnoremap > >gv
 
+"easier window navigation
+nnoremap <leader>hh <C-w>h
+nnoremap <leader>jj <C-w>j
+nnoremap <leader>kk <C-w>k
+nnoremap <leader>ll <C-w>l
+
 "replace word with whatever is in the 0 register
 nnoremap <leader>rep ciw<C-r>0<ESC>
 nnoremap <leader>Rep ciW<C-r>0<ESC>
@@ -71,9 +77,6 @@ set number
 "indent at same level as last line
 set autoindent
 
-"convenient completion
-inoremap <NUL> <C-x><C-i>
-
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 set completeopt=longest,menuone
@@ -93,7 +96,12 @@ function! Auto_complete_opened()
     end
 endfunction
 
-inoremap <expr> <Nul> Auto_complete_string()
+"convenient completion
+"inoremap <NUL>n <C-x><C-i>
+
+inoremap <expr> <NUL>n Auto_complete_string()
+
+inoremap <NUL><NUL> <ESC>n<ESC>ciw
 
 "fold using syntax normally
 set foldmethod=syntax
@@ -266,6 +274,8 @@ augroup MyAutocmds
 
     "insert sql foreign key snippet
     autocmd FileType sql nnoremap <buffer> <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
+
+    autocmd FileType sql nnoremap <buffer> <leader>ij :-1read $HOME/.vim/.sqlinnerjoin <CR> >>0 /\|\|\|<CR>ciw
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
