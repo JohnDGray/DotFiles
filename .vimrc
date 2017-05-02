@@ -275,7 +275,7 @@ augroup MyAutocmds
     "insert sql foreign key snippet
     autocmd FileType sql nnoremap <buffer> <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
 
-    autocmd FileType sql nnoremap <buffer> <leader>ij :-1read $HOME/.vim/.sqlinnerjoin <CR> >>0 /\|\|\|<CR>ciw
+    autocmd FileType sql nnoremap <buffer> <leader>jo :-1read $HOME/.vim/.sqljoin <CR> >>0 /\|\|\|<CR>ciw
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
