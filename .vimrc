@@ -51,6 +51,8 @@ set splitright
 "always show status
 set laststatus=2
 set statusline+=%F
+set statusline+=%=
+set statusline+=%{getcwd()}
 
 "highlight search matches as I type
 set incsearch
@@ -185,9 +187,14 @@ endfunction
 
 "quick access to buffers
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
-nnoremap <silent> <leader>bo! :call CloseAllBuffersButCurrent(1)<CR>
+"nnoremap <silent> <leader>bo! :call CloseAllBuffersButCurrent(1)<CR>
 nnoremap <TAB> :bnext<CR>
 nnoremap <S-TAB> :bprev<CR> 
+
+"quick access to tabs
+nnoremap <leader>to :tabo<CR>
+nnoremap <leader><TAB> :tabn<CR>
+nnoremap <leader><S-TAB> :tabp<CR>
 
 function! CloseAllBuffersButCurrent(force)
     let curr = bufnr("%")
