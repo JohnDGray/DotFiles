@@ -12,9 +12,14 @@ set scrolloff=9999
 "use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
 
-"don't use h or l repeatedly
-nnoremap hh <NOP>
-nnoremap ll <NOP>
+function! Initial_Setup()
+    :tabe
+    :tabe
+    :lcd /home/john/Documents/BowTieCode
+    :tabp
+    :lcd /home/john/Documents/BowTieData
+    :tabp
+endfunction
 
 "easier (un)indenting of code blocks
 vnoremap < <gv
@@ -89,6 +94,7 @@ function! Auto_complete_string()
         return "\<C-x>\<C-o>\<C-r>=Auto_complete_opened()\<CR>"
     end
 endfunction
+
 
 function! Auto_complete_opened()
     if pumvisible()
