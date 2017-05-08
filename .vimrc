@@ -116,6 +116,8 @@ set foldlevelstart=20
 "search down into subfolders
 "provides tab-completion for all file-related tasks
 set path+=**
+"convenient find
+nnoremap <leader>ff :find 
 
 "display all matching files when we tab complete
 set wildmenu
