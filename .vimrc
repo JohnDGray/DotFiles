@@ -282,7 +282,9 @@ augroup MyAutocmds
     autocmd FileType html inoremap <buffer> <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
 
     "html align tags vertically and position cursor on line in between
-    autocmd FileType html inoremap <buffer> <c-n> <ESC>F<<ESC>f>li<CR><SPACE><SPACE><ESC>f<i<CR><ESC>kI
+    autocmd FileType html inoremap <buffer> <c-n> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
+
+    autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
 
     "java add interface skeletons
     autocmd FileType java nnoremap <buffer> <leader>int :exe JavaImplementInterface() <CR>
