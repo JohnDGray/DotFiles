@@ -247,6 +247,11 @@ augroup MyAutocmds
     "run python program
     autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
 
+    "try sql script
+    autocmd FileType sql nnoremap <buffer> <leader>try :!psql testbowtie -f %<CR>
+    "run sql script
+    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh testbowtie % output.csv
+
     "reload html page
     autocmd FileType html nnoremap <buffer> <leader>rf :!firefox %<CR>
 

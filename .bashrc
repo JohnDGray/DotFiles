@@ -11,9 +11,9 @@ export EDITOR="$VISUAL"
 #set -o vi
 
 alias pd="pushd +1" 
-alias begpr="cd $HOME/Documents/BowTieData; \
-             pushd $HOME/Documents/BowTieCode; \
-             pushd $HOME/Documents;"
+alias begpr="cd $HOME/Documents/BowTieCode; \
+             pushd $HOME/Documents/BowTieData; \
+             pushd $HOME;"
 
 export SCALA_HOME="/usr/local/share/scala"
 export PATH="$SCALA_HOME/bin:$HOME/bin:$PATH"
