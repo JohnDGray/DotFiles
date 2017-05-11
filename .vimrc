@@ -284,10 +284,10 @@ augroup MyAutocmds
     autocmd FileType c nnoremap <buffer> <leader>for :-1read $HOME/.vim/.cloop.c <CR>
 
     "html complete tag
-    autocmd FileType html inoremap <buffer> <c-f> <ESC>maF<w<ESC>yiw`aa</><ESC>hpF<i
+    autocmd FileType html inoremap <buffer> <NUL>f </<C-x><C-o><ESC>F<i
 
     "html align tags vertically and position cursor on line in between
-    autocmd FileType html inoremap <buffer> <c-n> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
+    autocmd FileType html inoremap <buffer> <NUL><CR> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
 
     autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
 
