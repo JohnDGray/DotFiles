@@ -46,6 +46,8 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+inoremap <NUL><BS> <BS><BS><BS><BS>
+
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
 
@@ -243,6 +245,8 @@ endfunction
 
 augroup MyAutocmds
     au!
+
+    "use appropriate tab widths
 
     "run python program
     autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
