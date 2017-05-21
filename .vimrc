@@ -3,22 +3,20 @@ let mapleader = "\<SPACE>"
 "leave buffers without saving
 set hidden
 
-"don't redraw in macros
-set lazyredraw
-
 "keep cursor in the middle of the screen when possible
 set scrolloff=9999
 
 "use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
 
-function! Initial_Setup()
-    :tabe
-    :tabe
-    :lcd /home/john/Documents/BowTieCode
-    :tabp
-    :lcd /home/john/Documents/BowTieData
-    :tabp
+nnoremap <leader>3 :call ToggleRelativeNumber()<CR>
+
+function! ToggleRelativeNumber()
+    if &relativenumber
+        set norelativenumber
+    else
+        set relativenumber
+    endif
 endfunction
 
 "easier (un)indenting of code blocks
@@ -37,17 +35,18 @@ nnoremap <leader>Rep ciW<C-r>0<ESC>
 "replace highlighted text with whatever is in the 0 register
 vnoremap <leader>rep c<C-r>0<ESC>
 
-"capitalize last word
-nnoremap <leader>cap maviwgU`a
-nnoremap <leader>Cap maviWgU`a
-
 "tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
 
-inoremap <NUL><BS> <BS><BS><BS><BS>
+"capitalize last word
+nnoremap <leader>cap maviwgU`a
+nnoremap <leader>Cap maviWgU`a
+inoremap <NUL>cap <ESC>maviwgU`aa
+inoremap <NUL>Cap <ESC>maviWgU`aa
 
+inoremap <NUL><BS> <BS><BS><BS><BS>
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
 
@@ -57,9 +56,9 @@ set splitright
 
 "always show status
 set laststatus=2
-set statusline+=%F
-set statusline+=%=
-set statusline+=%{getcwd()}
+set statusline+=%n\ %F
+
+set title titlestring=%{getcwd()}
 
 "highlight search matches as I type
 set incsearch
@@ -76,7 +75,7 @@ syntax enable
 set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
-hi Normal guibg=NONE ctermbg=NONE
+hi Normal ctermbg=NONE
 set cursorline
 
 "show line numbers
@@ -109,7 +108,7 @@ endfunction
 "convenient completion
 "inoremap <NUL>n <C-x><C-i>
 
-inoremap <expr> <NUL>n Auto_complete_string()
+inoremap <expr> <NUL><C-n> Auto_complete_string()
 
 inoremap <NUL><NUL> <ESC>n<ESC>ciw
 
@@ -124,8 +123,6 @@ set foldlevelstart=20
 "search down into subfolders
 "provides tab-completion for all file-related tasks
 set path+=**
-"convenient find
-nnoremap <leader>ff :find 
 
 "display all matching files when we tab complete
 set wildmenu
@@ -195,16 +192,10 @@ function! ToggleNetrw()
     endif
 endfunction
 
-"quick access to buffers
+"quick buffer control
+nnoremap <leader><leader> :b#<CR>
+nnoremap <leader>bd :bp\|bd #<CR>
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
-"nnoremap <silent> <leader>bo! :call CloseAllBuffersButCurrent(1)<CR>
-nnoremap <TAB> :bnext<CR>
-nnoremap <S-TAB> :bprev<CR> 
-
-"quick access to tabs
-nnoremap <leader>to :tabo<CR>
-nnoremap <leader><TAB> :tabn<CR>
-nnoremap <leader><S-TAB> :tabp<CR>
 
 function! CloseAllBuffersButCurrent(force)
     let curr = bufnr("%")
@@ -223,7 +214,7 @@ function! CloseAllBuffersButCurrent(force)
 endfunction
 
 "shortcut: <C-SPACE> for tag jumps
-nnoremap <NUL> :call TagJump()<CR>
+nnoremap <leader>j :call TagJump()<CR>
 
 function! TagJump()
     let oneMatch = (len(taglist(expand("<cword>"))) == 1)
@@ -243,8 +234,83 @@ function! JavaImplementInterface()
     !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
 
+"commenting
+nnoremap <leader>cm :<C-U>call AddComment(0)<CR>
+vnoremap <leader>cm :<C-U>call AddComment(1)<CR>
+nnoremap <leader>uc :<C-U>call RemoveComment(0)<CR>
+vnoremap <leader>uc :<C-U>call RemoveComment(1)<CR>
+
+function! GetComment()
+    let comment = "#"
+    if &ft == "sql"
+        let comment = "--"
+    elseif index(["java", "javascript", "c"], &ft) > -1
+        let comment = "//"
+    endif
+    return comment
+endfunction
+
+function! AddComment(from_visual)
+    let vcount = v:count
+    if !a:from_visual
+        normal! ma
+    endif
+    let command = ":"
+    if a:from_visual
+        let command = command . "'<,'>"
+    else
+        let command = command . "."
+        if vcount && vcount > 1
+            let command = command . ",+" . string(vcount - 1)
+        endif
+    endif
+    let comment = GetComment()
+    let command = command . "norm i" . comment
+    exe command
+    if a:from_visual
+        normal! gv
+    else
+        normal! `a
+    endif
+    exe "normal! " . string(len(comment)) . "l"
+endfunction
+
+function! RemoveComment(from_visual)
+    let vcount = v:count
+    if !a:from_visual
+        normal! ma
+    endif
+    let command = ":"
+    if a:from_visual
+        let command = command . "'<,'>"
+    else
+        let command = command . "."
+        if vcount && vcount > 1
+            let command = command . ",+" . string(vcount - 1)
+        endif
+    endif
+    let comment = GetComment()
+    let cs = len(comment)
+    let pos = col('.')
+    let ll = len(getline('.'))
+    let offset = min([(ll-pos), cs])
+    let command = command . "s/^\\(\\s*\\)" . comment . "/\\1/"
+    exe command
+    if a:from_visual
+        normal! gv
+    else
+        normal! `a
+    endif
+    if offset > 0
+        exe "normal! " . string(offset) . "h"
+    endif
+endfunction
+
 augroup MyAutocmds
     au!
+
+    "colorful status line
+    hi statusline ctermfg=67
 
     "use appropriate tab widths
 
@@ -252,28 +318,9 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
 
     "try sql script
-    autocmd FileType sql nnoremap <buffer> <leader>try :!psql bowtie -f %<CR>
+    autocmd FileType sql nnoremap <buffer> <leader>try :!psql dbname -f %<CR>
     "run sql script
-    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh bowtie % out.csv
-
-    "reload html page
-    autocmd FileType html nnoremap <buffer> <leader>rf :!firefox %<CR>
-
-    "comment quickly with <leader>cm
-    autocmd FileType sql vnoremap <buffer> <leader>cm :norm i--<CR>gv
-    autocmd FileType sql nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i--<ESC>`a2l
-    autocmd FileType python,sh vnoremap <buffer> <leader>cm :norm i#<CR>gv
-    autocmd FileType python,sh nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i#<ESC>`al
-    autocmd FileType java,javascript,c vnoremap <buffer> <leader>cm :norm i//<CR>gv
-    autocmd FileType java,javascript,c nnoremap <buffer> <leader>cm ma<ESC>0<ESC>i//<ESC>`a2l
-
-    "uncomment quickly with <leader>uc
-    autocmd FileType sql vnoremap <buffer> <leader>uc :s/^\(\s*\)--/\1/<CR>gv
-    autocmd FileType sql nnoremap <buffer> <leader>uc ma:s/^\(\s*\)--/\1/<CR>`a2h
-    autocmd FileType java,javascript,c vnoremap <buffer> <leader>uc :s/^\(\s*\)\/\\1///<CR>gv
-    autocmd FileType java,javascript,c nnoremap <buffer> <leader>uc ma:s/^\(\s*\)\/\\1///<CR>`a2h
-    autocmd FileType python,sh  vnoremap <buffer> <leader>uc :s/^\(\s*\)#/\1/<CR>gv
-    autocmd FileType python,sh  nnoremap <buffer> <leader>uc ma:s/^\(\s*\)#/\1/<CR>`ah
+    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
 
     "skeletons
     autocmd FileType c nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
