@@ -85,7 +85,7 @@ set number
 "indent at same level as last line
 set autoindent
 
-filetype plugin on
+filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
 set completeopt=longest,menuone
 function! Auto_complete_string()
