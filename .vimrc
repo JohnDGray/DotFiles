@@ -76,7 +76,7 @@ set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal ctermbg=NONE
-set cursorline
+"set cursorline
 
 "show line numbers
 set number
@@ -151,7 +151,7 @@ function! Google(visual)
     if (&ft == "html")
         let ss = ss . "\\>"
     endif
-    exe "!firefox " . "https://www.google.com/search?q=" . ss
+    exe "!firefox -P alt " . "https://www.google.com/search?q=" . ss
 endfunction
 
 function! GetLanguage()
