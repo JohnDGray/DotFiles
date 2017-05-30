@@ -110,7 +110,7 @@ endfunction
 
 inoremap <expr> <NUL><C-n> Auto_complete_string()
 
-inoremap <NUL><NUL> <ESC>n<ESC>ciw
+inoremap <NUL><NUL> <ESC>n<ESC>3s
 
 "fold using syntax normally
 set foldmethod=syntax
@@ -307,36 +307,49 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
+function! Snippet(path)
+    let pos = col('.')
+    let wcc = 'wc -l < ' . a:path
+    let lines = system(wcc)
+    let lines = lines - 1
+    let cmd = ":.,+" . lines . "norm " . pos . "i "
+    exe ":-1read " . a:path
+    exe cmd
+    let moveup = lines . "k"
+    exe "normal! " . moveup
+    exe "normal! /|||\<CR>"
+    exe "normal! 0"
+endfunction
+
+let placeholder = "|||"
+
 augroup MyAutocmds
     au!
 
     "colorful status line
     hi statusline ctermfg=67
 
-    "use appropriate tab widths
+    "skeletons
+    autocmd BufNewFile *.html    0r $HOME/.vim/.skeleton.html
+    autocmd BufNewFile *.c       0r:$HOME/.vim/.skeleton.c
+    autocmd BufNewFile *.java    0r:$HOME/.vim/.skeleton.java 
 
     "run python program
-    autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
 
     "run javascript program
-    autocmd FileType javascript nnoremap <buffer> <leader>run :!nodejs %<CR>
+    autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
+    autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
 
     "try sql script
     autocmd FileType sql nnoremap <buffer> <leader>try :!psql dbname -f %<CR>
     "run sql script
     autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
 
-    "skeletons
-    autocmd FileType c nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.c <CR>4j
-    autocmd FileType java nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.java 
-         \<CR>ggf<d$"%pF.d$jji<TAB><SPACE><ESC>
-    autocmd FileType html nnoremap <buffer> <leader>sk :-1read $HOME/.vim/.skeleton.html <CR>
-
-    "c include statement
-    autocmd FileType c nnoremap <buffer> <leader>inc ma gg :-1read $HOME/.vim/.cinclude.c <CR> f>i
-
-    "c for-loop snippet
-    autocmd FileType c nnoremap <buffer> <leader>for :-1read $HOME/.vim/.cloop.c <CR>
+    "javascript 'for ... in' snippet
+    autocmd FileType javascript inoremap <buffer> <NUL>fin <SPACE><ESC>:call Snippet("$HOME/.vim/.jsforin.js")<CR>/\|\|\|<CR>3s
+    autocmd FileType javascript inoremap <buffer> <NUL>for <SPACE><ESC>:call Snippet("$HOME/.vim/.jsfor.js")<CR>/\|\|\|<CR>3s
 
     "html complete tag
     autocmd FileType html inoremap <buffer> <NUL>f </<C-x><C-o><ESC>F<i
@@ -345,14 +358,6 @@ augroup MyAutocmds
     autocmd FileType html inoremap <buffer> <NUL><CR> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
 
     autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
-
-    "java add interface skeletons
-    autocmd FileType java nnoremap <buffer> <leader>int :exe JavaImplementInterface() <CR>
-
-    "insert sql foreign key snippet
-    autocmd FileType sql nnoremap <buffer> <leader>fk :-1read $HOME/.vim/.sqlforeignkey <CR> 3>>0 magg0 f(byiw`a/\|\|\|<CR>hpndiwnciw
-
-    autocmd FileType sql nnoremap <buffer> <leader>jo :-1read $HOME/.vim/.sqljoin <CR> >>0 /\|\|\|<CR>ciw
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
