@@ -235,10 +235,10 @@ function! JavaImplementInterface()
 endfunction
 
 "commenting
-nnoremap <leader>cm :<C-U>call AddComment(0)<CR>
-vnoremap <leader>cm :<C-U>call AddComment(1)<CR>
-nnoremap <leader>uc :<C-U>call RemoveComment(0)<CR>
-vnoremap <leader>uc :<C-U>call RemoveComment(1)<CR>
+nnoremap <silent> <leader>cm :<C-U>call AddComment(0)<CR>
+vnoremap <silent> <leader>cm :<C-U>call AddComment(1)<CR>
+nnoremap <silent> <leader>uc :<C-U>call RemoveComment(0)<CR>
+vnoremap <silent> <leader>uc :<C-U>call RemoveComment(1)<CR>
 
 function! GetComment()
     let comment = "#"
@@ -291,11 +291,12 @@ function! RemoveComment(from_visual)
     endif
     let comment = GetComment()
     let cs = len(comment)
+    let comment = substitute(comment, "/", "\\\\/", "g")
     let pos = col('.')
     let ll = len(getline('.'))
     let offset = min([(ll-pos), cs])
     let command = command . "s/^\\(\\s*\\)" . comment . "/\\1/"
-    exe command
+    silent exe command
     if a:from_visual
         normal! gv
     else
@@ -316,6 +317,9 @@ augroup MyAutocmds
 
     "run python program
     autocmd FileType python nnoremap <buffer> <leader>run :!python %<CR>
+
+    "run javascript program
+    autocmd FileType javascript nnoremap <buffer> <leader>run :!nodejs %<CR>
 
     "try sql script
     autocmd FileType sql nnoremap <buffer> <leader>try :!psql dbname -f %<CR>
