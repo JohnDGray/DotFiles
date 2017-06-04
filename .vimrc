@@ -1,5 +1,7 @@
 let mapleader = "\<SPACE>"
 
+set formatoptions-=r formatoptions-=c formatoptions-=o 
+
 "set ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -329,6 +331,8 @@ endfunction
 
 augroup MyAutocmds
     au!
+
+    autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
 
     "colorful status line
     hi statusline ctermfg=67
