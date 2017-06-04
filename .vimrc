@@ -244,6 +244,8 @@ function! GetComment()
     let comment = "#"
     if &ft == "sql"
         let comment = "--"
+    elseif &ft == "vim"
+        let comment = "\""
     elseif index(["java", "javascript", "c"], &ft) > -1
         let comment = "//"
     endif
@@ -321,43 +323,50 @@ function! Snippet(path)
     exe "normal! 0"
 endfunction
 
-let placeholder = "|||"
-
 augroup MyAutocmds
     au!
 
     "colorful status line
     hi statusline ctermfg=67
+    
+    "----------
+    "---html---
+    "----------
+    "skeleton
+    autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
+    "complete tag
+    autocmd FileType html inoremap <buffer> <NUL>f </<C-x><C-o><ESC>F<i
+    "align tags vertically and position cursor on line in between
+    autocmd FileType html inoremap <buffer> <NUL><CR> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
+    "jump past next tag
+    autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
 
-    "skeletons
-    autocmd BufNewFile *.html    0r $HOME/.vim/.skeleton.html
-    autocmd BufNewFile *.c       0r:$HOME/.vim/.skeleton.c
-    autocmd BufNewFile *.java    0r:$HOME/.vim/.skeleton.java 
-
-    "run python program
-    autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
-    autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
-
-    "run javascript program
+    "----------------
+    "---javascript---
+    "----------------
+    "run program
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
+    "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
-
-    "try sql script
-    autocmd FileType sql nnoremap <buffer> <leader>try :!psql dbname -f %<CR>
-    "run sql script
-    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
-
     "javascript 'for ... in' snippet
     autocmd FileType javascript inoremap <buffer> <NUL>fin <SPACE><ESC>:call Snippet("$HOME/.vim/.jsforin.js")<CR>/\|\|\|<CR>3s
     autocmd FileType javascript inoremap <buffer> <NUL>for <SPACE><ESC>:call Snippet("$HOME/.vim/.jsfor.js")<CR>/\|\|\|<CR>3s
 
-    "html complete tag
-    autocmd FileType html inoremap <buffer> <NUL>f </<C-x><C-o><ESC>F<i
+    "------------
+    "---python---
+    "------------
+    "run program
+    autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
+    "run program and pipe output to less
+    autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
 
-    "html align tags vertically and position cursor on line in between
-    autocmd FileType html inoremap <buffer> <NUL><CR> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
-
-    autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
+    "---------
+    "---sql---
+    "---------
+    "try script
+    "autocmd FileType sql nnoremap <buffer> <leader>try :!psql <<<dbname>>> -f %<CR>
+    "run script
+    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
