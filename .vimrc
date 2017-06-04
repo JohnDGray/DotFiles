@@ -43,10 +43,7 @@ set expandtab
 "capitalize last word
 nnoremap <leader>cap maviwgU`a
 nnoremap <leader>Cap maviWgU`a
-inoremap <NUL>cap <ESC>maviwgU`aa
-inoremap <NUL>Cap <ESC>maviWgU`aa
 
-inoremap <NUL><BS> <BS><BS><BS><BS>
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
 
@@ -105,12 +102,7 @@ function! Auto_complete_opened()
     end
 endfunction
 
-"convenient completion
-"inoremap <NUL>n <C-x><C-i>
-
-inoremap <expr> <NUL><C-n> Auto_complete_string()
-
-inoremap <NUL><NUL> <ESC>n<ESC>3s
+nnoremap <leader><leader> n<ESC>3s
 
 "fold using syntax normally
 set foldmethod=syntax
@@ -193,7 +185,6 @@ function! ToggleNetrw()
 endfunction
 
 "quick buffer control
-nnoremap <leader><leader> :b#<CR>
 nnoremap <leader>bd :bp\|bd #<CR>
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
 
@@ -329,40 +320,42 @@ augroup MyAutocmds
     "colorful status line
     hi statusline ctermfg=67
     
-    "----------
-    "---html---
-    "----------
+    "-------------
+    "---au-html---
+    "-------------
     "skeleton
     autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
-    autocmd FileType html inoremap <buffer> <NUL>f </<C-x><C-o><ESC>F<i
+    autocmd FileType html nnoremap <buffer> <leader>f a</<C-x><C-o><ESC>F<i
     "align tags vertically and position cursor on line in between
-    autocmd FileType html inoremap <buffer> <NUL><CR> <ESC>f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
+    "autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
+    autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     "jump past next tag
-    autocmd FileType html inoremap <buffer> <NUL><NUL> <ESC>lf>a
+    autocmd FileType html nnoremap <buffer> <leader><leader> lf>a
 
-    "----------------
-    "---javascript---
-    "----------------
+    "-------------------
+    "---au-javascript---
+    "-------------------
     "run program
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
-    "javascript 'for ... in' snippet
-    autocmd FileType javascript inoremap <buffer> <NUL>fin <SPACE><ESC>:call Snippet("$HOME/.vim/.jsforin.js")<CR>/\|\|\|<CR>3s
-    autocmd FileType javascript inoremap <buffer> <NUL>for <SPACE><ESC>:call Snippet("$HOME/.vim/.jsfor.js")<CR>/\|\|\|<CR>3s
+    "'for ... in' snippet
+    autocmd FileType javascript nnoremap <buffer> <leader>fin :call Snippet("$HOME/.vim/.jsforin.js")<CR>/\|\|\|<CR>3s
+    "c-style for loop snippet
+    autocmd FileType javascript nnoremap <buffer> <leader>for :call Snippet("$HOME/.vim/.jsfor.js")<CR>/\|\|\|<CR>3s
 
-    "------------
-    "---python---
-    "------------
+    "---------------
+    "---au-python---
+    "---------------
     "run program
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
 
-    "---------
-    "---sql---
-    "---------
+    "------------
+    "---au-sql---
+    "------------
     "try script
     "autocmd FileType sql nnoremap <buffer> <leader>try :!psql <<<dbname>>> -f %<CR>
     "run script
