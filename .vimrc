@@ -143,6 +143,14 @@ function! Google(visual)
     if (&ft == "html")
         let ss = ss . "\\>"
     endif
+    let ss = substitute(ss, "(", "\\\\(", "g") 
+    let ss = substitute(ss, ")", "\\\\)", "g") 
+    let ss = substitute(ss, "<", "\\\\<", "g") 
+    let ss = substitute(ss, ">", "\\\\>", "g") 
+    let ss = substitute(ss, "|", "\\\\|", "g") 
+    let ss = substitute(ss, "!", "\\\\!", "g") 
+    let ss = substitute(ss, "&", "\\\\&", "g") 
+    let ss = substitute(ss, ";", "\\\\;", "g") 
     exe "!firefox -P alt " . "https://www.google.com/search?q=" . ss
 endfunction
 
