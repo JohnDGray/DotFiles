@@ -1,5 +1,10 @@
 let mapleader = "\<SPACE>"
 
+"set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 "leave buffers without saving
 set hidden
 
@@ -339,7 +344,7 @@ augroup MyAutocmds
     "autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     "jump past next tag
-    autocmd FileType html nnoremap <buffer> <leader><leader> lf>a
+    autocmd FileType html nnoremap <buffer> <leader><leader> lf>l
 
     "-------------------
     "---au-javascript---
@@ -348,10 +353,6 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
-    "'for ... in' snippet
-    autocmd FileType javascript nnoremap <buffer> <leader>fin :call Snippet("$HOME/.vim/.jsforin.js")<CR>/\|\|\|<CR>3s
-    "c-style for loop snippet
-    autocmd FileType javascript nnoremap <buffer> <leader>for :call Snippet("$HOME/.vim/.jsfor.js")<CR>/\|\|\|<CR>3s
 
     "---------------
     "---au-python---
