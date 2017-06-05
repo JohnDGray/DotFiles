@@ -100,13 +100,11 @@ function! Auto_complete_string()
     end
 endfunction
 
-
 function! Auto_complete_opened()
     if pumvisible()
         return "\<Down>"
-    else
-        return "X\<bs>\<C-n>"
     end
+    return ""
 endfunction
 
 nnoremap <leader><leader> n<ESC>3s
@@ -357,6 +355,14 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
+    "autocomplete
+    autocmd FileType javascript inoremap <buffer> <expr> <NUL> Auto_complete_string()
+    "tern definition
+    autocmd FileType javascript nnoremap <buffer> <leader>d :TernDef<CR>
+    "tern documentation
+    autocmd FileType javascript nnoremap <buffer> K :TernDoc<CR>
+    "tern usages/references
+    autocmd FileType javascript nnoremap <buffer> <leader>n :TernRefs<CR>
 
     "---------------
     "---au-python---
