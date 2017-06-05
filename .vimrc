@@ -181,18 +181,16 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 
 function! ToggleNetrw()
-    if (&ft == "netrw")
-        :bd
-    else
-        let Lex = 1
-        let i = bufnr("$")
-        while (i >= 1)
-            if (getbufvar(i, "&filetype") == "netrw")
-                exe "bd".i
-                return 0
-            endif
-            let i-=1
-        endwhile
+    let lex = 1
+    let i = bufnr("$")
+    while (i >= 1)
+        if (getbufvar(i, "&filetype") == "netrw")
+            silent exe "bwipeout ".i
+            let lex = 0
+        endif
+        let i-=1
+    endwhile
+    if lex
         :Lexplore
     endif
 endfunction
