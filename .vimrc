@@ -1,6 +1,7 @@
 let mapleader = "\<SPACE>"
 
-set formatoptions-=r formatoptions-=c formatoptions-=o 
+"automatically lint on javascript files on save
+let jshint2_save = 1
 
 "set ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -328,11 +329,12 @@ endfunction
 augroup MyAutocmds
     au!
 
+    "no autocomment on next line after comment
     autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
 
     "colorful status line
     hi statusline ctermfg=67
-    
+
     "-------------
     "---au-html---
     "-------------
@@ -369,6 +371,8 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
+    "lint on write
+    autocmd BufWritePost *.py call Flake8()
 
     "------------
     "---au-sql---
