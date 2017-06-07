@@ -346,7 +346,9 @@ augroup MyAutocmds
     "autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     "jump past next tag
-    autocmd FileType html nnoremap <buffer> <leader><leader> lf>l
+    autocmd FileType html nnoremap <buffer> <leader><leader> /><CR>l
+    "jump past previous tag
+    autocmd FileType html nnoremap <buffer> <NUL><NUL> ?<<CR>?><CR>l
 
     "-------------------
     "---au-javascript---
