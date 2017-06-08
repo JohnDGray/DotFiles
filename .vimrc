@@ -1,5 +1,13 @@
 let mapleader = "\<SPACE>"
 
+"quickfix shortcuts
+nnoremap <leader>cf :cfirst<CR>
+nnoremap <leader>cn :cnext<CR>
+nnoremap <leader>cp :cprevious<CR>
+
+"don't show call signature
+let g:jedi#show_call_signatures = "0"
+
 "automatically lint on javascript files on save
 let jshint2_save = 1
 
@@ -375,6 +383,8 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
     "lint on write
     autocmd BufWritePost *.py call Flake8()
+    "fold by indentation
+    autocmd FileType python setlocal foldmethod=indent
 
     "------------
     "---au-sql---
@@ -391,7 +401,5 @@ augroup MyAutocmds
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
 
-    "fold by indentation for python
-    autocmd FileType python setlocal foldmethod=indent
 
 augroup END
