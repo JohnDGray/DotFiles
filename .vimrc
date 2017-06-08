@@ -6,7 +6,10 @@ nnoremap <leader>cn :cnext<CR>
 nnoremap <leader>cp :cprevious<CR>
 
 "don't show call signature
-let g:jedi#show_call_signatures = "0"
+let g:jedi#show_call_signatures = 0
+
+"don't popup on dot
+let g:jedi#popup_on_dot = 0
 
 "automatically lint on javascript files on save
 let jshint2_save = 1
@@ -224,8 +227,8 @@ function! CloseAllBuffersButCurrent(force)
     exe "ls"
 endfunction
 
-"shortcut: <C-SPACE> for tag jumps
-nnoremap <leader>j :call TagJump()<CR>
+"shortcut for tag jumps
+"nnoremap <leader>j :call TagJump()<CR>
 
 function! TagJump()
     let oneMatch = (len(taglist(expand("<cword>"))) == 1)
