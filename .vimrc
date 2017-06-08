@@ -384,11 +384,12 @@ augroup MyAutocmds
     "run script
     autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
 
+    "c
+    "skeleton
+    autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
+
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
-
-    "remind me not to go over 79 chars in a line
-    autocmd FileType c,python,java,javascript,scheme,sh,sql,html,css match ErrorMsg "\%>80v.\+"
 
     "fold by indentation for python
     autocmd FileType python setlocal foldmethod=indent
