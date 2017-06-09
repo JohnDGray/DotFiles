@@ -1,24 +1,5 @@
 let mapleader = "\<SPACE>"
 
-"quickfix shortcuts
-nnoremap <leader>cf :cfirst<CR>
-nnoremap <leader>cn :cnext<CR>
-nnoremap <leader>cp :cprevious<CR>
-
-"don't show call signature
-let g:jedi#show_call_signatures = 0
-
-"don't popup on dot
-let g:jedi#popup_on_dot = 0
-
-"automatically lint on javascript files on save
-let jshint2_save = 1
-
-"set ultisnips triggers
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
 "leave buffers without saving
 set hidden
 
@@ -43,10 +24,11 @@ vnoremap < <gv
 vnoremap > >gv
 
 "easier window navigation
-nnoremap <leader>hh <C-w>h
-nnoremap <leader>jj <C-w>j
-nnoremap <leader>kk <C-w>k
-nnoremap <leader>ll <C-w>l
+nnoremap <leader>wp <C-w>p
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
 
 "replace word with whatever is in the 0 register
 nnoremap <leader>rep ciw<C-r>0<ESC>
@@ -102,7 +84,7 @@ set number
 set autoindent
 
 filetype plugin indent on
-set omnifunc=syntaxcomplete#Complete
+"set omnifunc=syntaxcomplete#Complete
 set completeopt=longest,menuone
 function! Auto_complete_string()
     if pumvisible()
@@ -208,8 +190,15 @@ function! ToggleNetrw()
 endfunction
 
 "quick buffer control
-nnoremap <leader>bd :bp\|bd #<CR>
+nnoremap <leader><TAB> :buffernext<CR>
+nnoremap <leader><S-TAB> :bufferprevious<CR>
+nnoremap <leader>bd :b#\|bd #<CR>
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
+
+"quickfix shortcuts
+nnoremap <leader>cf :cfirst<CR>
+nnoremap <leader>cn :cnext<CR>
+nnoremap <leader>cp :cprevious<CR>
 
 function! CloseAllBuffersButCurrent(force)
     let curr = bufnr("%")
@@ -230,7 +219,7 @@ endfunction
 "shortcut for tag jumps
 "nnoremap <leader>j :call TagJump()<CR>
 
-function! TagJump()
+function! DefinitionJump()
     let oneMatch = (len(taglist(expand("<cword>"))) == 1)
     sp
     if oneMatch
@@ -314,7 +303,7 @@ function! RemoveComment(from_visual)
     let command = command . "s/^\\(\\s*\\)" . comment . "/\\1/"
     silent exe command
     if a:from_visual
-        normal! gv
+       normal! gv
     else
         normal! `a
     endif
@@ -323,20 +312,46 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-function! Snippet(path)
-    let pos = col('.')
-    let wcc = 'wc -l < ' . a:path
-    let lines = system(wcc)
-    let lines = lines - 1
-    let cmd = ":.,+" . lines . "norm " . pos . "i "
-    exe ":-1read " . a:path
-    exe cmd
-    let moveup = lines . "k"
-    exe "normal! " . moveup
-    exe "normal! /|||\<CR>"
-    exe "normal! 0"
+function! TagJump(display_func)
+    :spl
+    let word = expand("<cword>")
+    try
+        exe a:display_func
+        :wincmd p
+    catch
+        :q
+        :echo "Could not display for: " . word
+    endtry
 endfunction
 
+"---------------------------------------------
+"-------------------Section-------------------
+"-------------------Plugins-------------------
+"---------------------------------------------
+"don't try to autocomplete on import statement
+let g:jedi#smart_auto_mappings = 0
+
+"don't show method signature
+let g:jedi#show_call_signatures = 0
+
+"don't popup on dot
+let g:jedi#popup_on_dot = 0
+
+"disable go to definition
+let g:jedi#goto_command = ""
+
+"automatically lint on javascript files on save
+let jshint2_save = 1
+
+"set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+"---------------------------------------------
+"-------------------Section-------------------
+"-------------------Autocmds------------------
+"---------------------------------------------
 augroup MyAutocmds
     au!
 
@@ -371,7 +386,7 @@ augroup MyAutocmds
     "autocomplete
     autocmd FileType javascript inoremap <buffer> <expr> <NUL> Auto_complete_string()
     "tern definition
-    autocmd FileType javascript nnoremap <buffer> <leader>d :TernDef<CR>
+    autocmd FileType javascript nnoremap <buffer> <silent> <leader>d :call TagJump("TernDef")<CR>
     "tern documentation
     autocmd FileType javascript nnoremap <buffer> K :TernDoc<CR>
     "tern usages/references
@@ -384,6 +399,8 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
+    "jedi definition
+    autocmd FileType python nnoremap <buffer> <silent> <leader>d :call TagJump("call jedi#goto()")<CR>
     "lint on write
     autocmd BufWritePost *.py call Flake8()
     "fold by indentation
