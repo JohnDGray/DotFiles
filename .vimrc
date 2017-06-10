@@ -55,6 +55,8 @@ set splitright
 "always show status
 set laststatus=2
 set statusline+=%n\ %F
+set statusline+=%=
+set statusline+=%{getcwd()}
 
 set title titlestring=%{getcwd()}
 
