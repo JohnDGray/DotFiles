@@ -291,38 +291,23 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-function! TagJump(display_func)
-"    :spl
-    let word = expand("<cword>")
+nnoremap <leader>d TagJump()
+
+function! TagJump()
     try
+        let word = expand("<cword>")
         exe "stj " . word
-"        exe a:display_func
-"        :wincmd p
     catch
-"        :q
-        :echo "Could not display definition for: " . word
+        :echo "Could not display definition"
         return
     endtry
-    :wincmd p
+    wincmd p
 endfunction
 
-set noshowmode
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
-"don't try to autocomplete on import statement
-"let g:jedi#smart_auto_mappings = 0
-
-"don't show method signature
-let g:jedi#show_call_signatures = 2
-
-"don't popup on dot
-let g:jedi#popup_on_dot = 0
-
-"disable go to definition
-let g:jedi#goto_command = ""
-
 "automatically lint on javascript files on save
 let jshint2_save = 1
 
@@ -368,14 +353,6 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
-    "autocomplete
-    autocmd FileType javascript inoremap <buffer> <expr> <NUL> Auto_complete_string()
-    "tern definition
-    autocmd FileType javascript nnoremap <buffer> <silent> <leader>d :call TagJump("TernDef")<CR>
-    "tern documentation
-    autocmd FileType javascript nnoremap <buffer> K :TernDoc<CR>
-    "tern usages/references
-    autocmd FileType javascript nnoremap <buffer> <leader>n :TernRefs<CR>
 
     "---------------
     "---au-python---
@@ -384,8 +361,6 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
-    "jedi definition
-    autocmd FileType python nnoremap <buffer> <silent> <leader>d :call TagJump("call jedi#goto()")<CR>
     "lint on write
     autocmd BufWritePost *.py call Flake8()
     "fold by indentation
