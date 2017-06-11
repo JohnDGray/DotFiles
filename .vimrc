@@ -320,18 +320,12 @@ endfunction
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
-"automatically lint on javascript files on save
-"let jshint2_save = 1
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_wq = 0
-
+let g:syntastic_enable_signs = 0
+let g:syntastic_enable_balloons = 0
+let g:syntastic_enable_highlighting = 0
 let g:syntastic_python_checkers = ['flake8']
 
 "set ultisnips triggers
@@ -346,6 +340,7 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 augroup MyAutocmds
     au!
 
+    "Update tags on write
     autocmd BufWritePost  * silent exe "!UpdateTags.sh ."
 
     "no autocomment on next line after comment
@@ -384,8 +379,6 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
-    "lint on write
-"    autocmd BufWritePost *.py call Flake8()
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
