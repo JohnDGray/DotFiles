@@ -86,13 +86,18 @@ set number
 set autoindent
 
 filetype plugin indent on
-"set omnifunc=syntaxcomplete#Complete
+
+"Completion
 set completeopt=longest,menuone
+inoremap <expr> <NUL> Auto_complete_string()
+inoremap <expr> <CR> Completion_lookup()
+inoremap <expr> \|\|\| "\<ESC>:on\<CR>a"
+
 function! Auto_complete_string()
     if pumvisible()
-        return "\<C-n>"
+        return "\<Down>"
     else
-        return "\<C-x>\<C-o>\<C-r>=Auto_complete_opened()\<CR>"
+        return "\<C-x>\<C-]>\<C-r>=Auto_complete_opened()\<CR>"
     end
 endfunction
 
@@ -101,6 +106,14 @@ function! Auto_complete_opened()
         return "\<Down>"
     end
     return ""
+endfunction
+
+function! Completion_lookup()
+    if pumvisible()
+        return "\<CR>\<ESC>:call TagJump()\<CR>a"
+    else
+        return "\<CR>"
+    endif
 endfunction
 
 "fold using syntax normally
@@ -290,7 +303,7 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-nnoremap <leader>d TagJump()
+nnoremap <leader>d :call TagJump()<CR>
 
 function! TagJump()
     try
@@ -338,8 +351,8 @@ augroup MyAutocmds
     "no autocomment on next line after comment
     autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
 
-    "colorful status line
-"    hi statusline ctermfg=67
+    "resize windows when vim is resized
+    autocmd VimResized * wincmd =
 
     "-------------
     "---au-html---
