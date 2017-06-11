@@ -58,7 +58,7 @@ set statusline+=%n\ %F
 set statusline+=%=
 set statusline+=%{getcwd()}
 
-set title titlestring=%{getcwd()}
+"set title titlestring=%{getcwd()}
 
 "highlight search matches as I type
 set incsearch
@@ -120,8 +120,8 @@ set path+=**
 "display all matching files when we tab complete
 set wildmenu
 
-"Create the 'tags' file (install ctags first)
-command! MakeTags !ctags -R .
+"Update tags
+command! MakeTags !ctags -R --exclude=.git .
 
 "Search parent directories for tags as well
 set tags=./tags,tags;
@@ -139,7 +139,7 @@ function! Google(visual)
         let text = join(split(@a), "+")
         let ss = ss . text
     else
-        let ss = ss . "<cword>"
+        let ss = ss . expand("<cword>")
     endif
     if (&ft == "html")
         let ss = ss . "\\>"
@@ -192,8 +192,6 @@ function! ToggleNetrw()
 endfunction
 
 "quick buffer control
-nnoremap <leader><TAB> :buffernext<CR>
-nnoremap <leader><S-TAB> :bufferprevious<CR>
 nnoremap <leader>bd :b#\|bd #<CR>
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
 
@@ -216,27 +214,6 @@ function! CloseAllBuffersButCurrent(force)
         let i-=1
     endwhile
     exe "ls"
-endfunction
-
-"shortcut for tag jumps
-"nnoremap <leader>j :call TagJump()<CR>
-
-function! DefinitionJump()
-    let oneMatch = (len(taglist(expand("<cword>"))) == 1)
-    sp
-    if oneMatch
-        exe "normal! g\<C-]>"
-        exe "normal! z\<CR>"
-        exe "normal! \<C-w>k"
-    else
-        exe "ts " . expand("<cword>")
-    endif
-endfunction
-
-function! JavaImplementInterface()
-    !python $HOME/bin/JavaImplementInterface.py %:p
-    -1read $HOME/bin/TEMPJAVINTFILE
-    !rm $HOME/bin/TEMPJAVINTFILE
 endfunction
 
 "commenting
@@ -315,26 +292,30 @@ function! RemoveComment(from_visual)
 endfunction
 
 function! TagJump(display_func)
-    :spl
+"    :spl
     let word = expand("<cword>")
     try
-        exe a:display_func
-        :wincmd p
+        exe "stj " . word
+"        exe a:display_func
+"        :wincmd p
     catch
-        :q
-        :echo "Could not display for: " . word
+"        :q
+        :echo "Could not display definition for: " . word
+        return
     endtry
+    :wincmd p
 endfunction
 
+set noshowmode
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
 "don't try to autocomplete on import statement
-let g:jedi#smart_auto_mappings = 0
+"let g:jedi#smart_auto_mappings = 0
 
 "don't show method signature
-let g:jedi#show_call_signatures = 0
+let g:jedi#show_call_signatures = 2
 
 "don't popup on dot
 let g:jedi#popup_on_dot = 0
@@ -356,6 +337,8 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 "---------------------------------------------
 augroup MyAutocmds
     au!
+
+    autocmd BufWritePost  * silent exe "!UpdateTags.sh ."
 
     "no autocomment on next line after comment
     autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
