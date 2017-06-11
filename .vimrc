@@ -56,7 +56,7 @@ set splitright
 set laststatus=2
 set statusline+=%n\ %F
 set statusline+=%=
-set statusline+=%{getcwd()}
+"set statusline+=%{getcwd()}
 
 "set title titlestring=%{getcwd()}
 
@@ -102,8 +102,6 @@ function! Auto_complete_opened()
     end
     return ""
 endfunction
-
-nnoremap <leader><leader> n<ESC>3s
 
 "fold using syntax normally
 set foldmethod=syntax
@@ -192,6 +190,7 @@ function! ToggleNetrw()
 endfunction
 
 "quick buffer control
+nnoremap <BS> :b#<CR>
 nnoremap <leader>bd :b#\|bd #<CR>
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
 
@@ -309,7 +308,18 @@ endfunction
 "-------------------Plugins-------------------
 "---------------------------------------------
 "automatically lint on javascript files on save
-let jshint2_save = 1
+"let jshint2_save = 1
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_checkers = ['flake8']
 
 "set ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -329,7 +339,7 @@ augroup MyAutocmds
     autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
 
     "colorful status line
-    hi statusline ctermfg=67
+"    hi statusline ctermfg=67
 
     "-------------
     "---au-html---
@@ -362,7 +372,7 @@ augroup MyAutocmds
     "run program and pipe output to less
     autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
     "lint on write
-    autocmd BufWritePost *.py call Flake8()
+"    autocmd BufWritePost *.py call Flake8()
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
