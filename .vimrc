@@ -132,7 +132,7 @@ set path+=**
 set wildmenu
 
 "Update tags
-command! MakeTags !ctags -R --exclude=.git .
+command! MakeTags !ctags -Rnu --exclude=.git .
 
 "Search parent directories for tags as well
 set tags=./tags,tags;
