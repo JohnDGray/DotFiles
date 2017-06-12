@@ -138,23 +138,18 @@ command! MakeTags !ctags -R --exclude=.git .
 set tags=./tags,tags;
 
 "Google word shortcut
-nnoremap <leader>go :call Google(0)<CR>
-vnoremap <leader>go "ay :call Google(1)<CR>
+nnoremap K :call GetDocs()<CR>
 
-function! Google(visual)
-    let ss = GetLanguage()
-    if (&ft == "html")
-        let ss = ss . "\\<"
-    endif
-    if a:visual
-        let text = join(split(@a), "+")
-        let ss = ss . text
+function! GetDocs()
+    let ss = "https://www.google.com/search?q="
+    if (&ft == "python")
+        let ss = "https://docs.python.org/3/search.html?q="
+    elseif (&ft == "javascript" || &ft == "html" || &ft == "css")
+        let ss = "https://developer.mozilla.org/en-US/search?q="
     else
-        let ss = ss . expand("<cword>")
+        let ss = ss . GetLanguage()
     endif
-    if (&ft == "html")
-        let ss = ss . "\\>"
-    endif
+    let ss = ss . expand("<cword>")
     let ss = substitute(ss, "(", "\\\\(", "g") 
     let ss = substitute(ss, ")", "\\\\)", "g") 
     let ss = substitute(ss, "<", "\\\\<", "g") 
@@ -163,7 +158,7 @@ function! Google(visual)
     let ss = substitute(ss, "!", "\\\\!", "g") 
     let ss = substitute(ss, "&", "\\\\&", "g") 
     let ss = substitute(ss, ";", "\\\\;", "g") 
-    exe "!firefox -P alt " . "https://www.google.com/search?q=" . ss
+    exe "silent !firefox -P alt " . ss . " &"
 endfunction
 
 function! GetLanguage()
