@@ -1,3 +1,11 @@
+"------------------------------
+"-----------Section------------
+"-----------General------------
+"------------------------------
+"manage plugins
+execute pathogen#infect()
+
+"leader
 let mapleader = "\<SPACE>"
 
 "leave buffers without saving
@@ -8,16 +16,6 @@ set scrolloff=9999
 
 "use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
-
-nnoremap <leader>3 :call ToggleRelativeNumber()<CR>
-
-function! ToggleRelativeNumber()
-    if &relativenumber
-        set norelativenumber
-    else
-        set relativenumber
-    endif
-endfunction
 
 "easier (un)indenting of code blocks
 vnoremap < <gv
@@ -33,8 +31,6 @@ nnoremap <leader>wl <C-w>l
 "replace word with whatever is in the 0 register
 nnoremap <leader>rep ciw<C-r>0<ESC>
 nnoremap <leader>Rep ciW<C-r>0<ESC>
-"replace highlighted text with whatever is in the 0 register
-vnoremap <leader>rep c<C-r>0<ESC>
 
 "tab stuff
 set tabstop=4
@@ -56,27 +52,18 @@ set splitright
 set laststatus=2
 set statusline+=%n\ %F
 set statusline+=%=
-"set statusline+=%{getcwd()}
-
-"set title titlestring=%{getcwd()}
+set statusline+=%{getcwd()}
 
 "highlight search matches as I type
 set incsearch
-"highlight all matches
-"set hlsearch
-"remove highlighting easily
-"nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
-"manage plugins
-execute pathogen#infect()
-
-"theme and syntax highlighting stuff
+"color scheme and syntax highlighting stuff
 syntax enable
 set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal ctermbg=NONE
-"set cursorline
+set cursorline
 
 "show line numbers
 set number
@@ -105,6 +92,10 @@ function! Toggle_Def()
     else
         normal! ma
         let word = expand("<cword>")
+        if !word
+            normal! b
+            let word = expand("<cword>")
+        endif
         while col('.') > 1
             try 
                 exe "stj " . word
@@ -112,7 +103,7 @@ function! Toggle_Def()
                 wincmd p
                 break   
             catch
-                normal! h
+                normal! b
                 let word = expand("<cword>")
             endtry
         endwhile
@@ -329,6 +320,8 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
+nnoremap <silent> <F5> :silent make!<CR> <C-l>
+
 function! OpenQuickfix()
     if ! empty(getqflist())
         copen
@@ -355,10 +348,6 @@ function! RelintIfAlreadyLinting()
         silent make!
     endif
 endfunction
-
-set noshowmode
-
-nnoremap <silent> <F5> :silent make!<CR>
 
 "---------------------------------------------
 "-------------------Section-------------------
