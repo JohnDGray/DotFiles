@@ -90,8 +90,48 @@ filetype plugin indent on
 "Completion
 set completeopt=longest,menuone
 inoremap <expr> <NUL> Auto_complete_string()
-inoremap <expr> <CR> Completion_lookup()
-inoremap <expr> \|\|\| "\<ESC>:on\<CR>a"
+"inoremap <expr> <CR> Completion_lookup()
+inoremap <silent> <expr> XXX "\<ESC>:call Toggle_Def()\<CR>a"
+nnoremap <silent> <leader>d :call Toggle_Def()<CR>
+
+let g:definition_displayed=0
+
+function! Toggle_Def()
+    if g:definition_displayed
+        let g:definition_displayed=0
+        if winnr('$') > 1
+            wincmd p
+            q
+        endif
+    else
+        normal! ma
+        let word = expand("<cword>")
+        while col('.') > 1
+            try 
+                exe "stj " . word
+                let g:definition_displayed=1
+                wincmd p
+                break   
+            catch
+                normal! h
+                let word = expand("<cword>")
+            endtry
+        endwhile
+        if !g:definition_displayed
+            try 
+                exe "stj " . word
+                let g:definition_displayed=1
+                wincmd p
+            catch
+            endtry
+        endif
+        normal! `a
+        if !g:definition_displayed
+            echo "Could not display definition"
+        endif
+    endif
+endfunction
+        
 
 function! Auto_complete_string()
     if pumvisible()
@@ -106,14 +146,6 @@ function! Auto_complete_opened()
         return "\<Down>"
     end
     return ""
-endfunction
-
-function! Completion_lookup()
-    if pumvisible()
-        return "\<CR>\<ESC>:call TagJump()\<CR>a"
-    else
-        return "\<CR>"
-    endif
 endfunction
 
 "fold using syntax normally
@@ -197,15 +229,15 @@ function! ToggleNetrw()
     endif
 endfunction
 
-"quick buffer control
-nnoremap <BS> :b#<CR>
-nnoremap <leader>bd :b#\|bd #<CR>
-nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
-
 "quickfix shortcuts
 nnoremap <leader>cf :cfirst<CR>
 nnoremap <leader>cn :cnext<CR>
 nnoremap <leader>cp :cprevious<CR>
+
+"delete buffer without closing window
+nnoremap <leader>bd :b#\|bd #<CR>
+"close all open buffers except current buffer
+nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
 
 function! CloseAllBuffersButCurrent(force)
     let curr = bufnr("%")
@@ -298,31 +330,21 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-nnoremap <leader>d :call TagJump()<CR>
-
-function! TagJump()
-    try
-        let word = expand("<cword>")
-        exe "stj " . word
-    catch
-        :echo "Could not display definition"
-        return
-    endtry
-    wincmd p
+function! OpenQuickfix()
+    if ! empty(getqflist())
+        copen
+        redraw!
+    else
+        cclose
+    endif
 endfunction
+
+set noshowmode
 
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_signs = 0
-let g:syntastic_enable_balloons = 0
-let g:syntastic_enable_highlighting = 0
-let g:syntastic_python_checkers = ['flake8']
-
 "set ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -334,6 +356,10 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 "---------------------------------------------
 augroup MyAutocmds
     au!
+
+    autocmd QuickFixCmdPost * silent call OpenQuickfix()
+
+    autocmd BufWritePost *.py,*.js silent make!
 
     "Update tags on write
     autocmd BufWritePost  * silent exe "!UpdateTags.sh ."
@@ -352,7 +378,6 @@ augroup MyAutocmds
     "complete tag
     autocmd FileType html nnoremap <buffer> <leader>f a</<C-x><C-o><ESC>F<i
     "align tags vertically and position cursor on line in between
-    "autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
     "jump past next tag
     autocmd FileType html nnoremap <buffer> <leader><leader> /><CR>l
