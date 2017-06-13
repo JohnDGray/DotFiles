@@ -90,9 +90,8 @@ filetype plugin indent on
 "Completion
 set completeopt=longest,menuone
 inoremap <expr> <NUL> Auto_complete_string()
-"inoremap <expr> <CR> Completion_lookup()
-inoremap <silent> <expr> XXX "\<ESC>:call Toggle_Def()\<CR>a"
-nnoremap <silent> <leader>d :call Toggle_Def()<CR>
+nnoremap <silent> <F10> :call Toggle_Def()<CR>
+inoremap <silent> <expr> <F10> "\<ESC>:call Toggle_Def()\<CR>a"
 
 let g:definition_displayed=0
 
@@ -334,12 +333,32 @@ function! OpenQuickfix()
     if ! empty(getqflist())
         copen
         redraw!
+        wincmd p
     else
         cclose
     endif
 endfunction
 
+function! QuickFixIsOpen()
+    let i = winnr("$")
+    while i >= 0
+        if getbufvar(winbufnr(i), '&buftype') == 'quickfix'
+            return 1
+        endif
+        let i -= 1
+    endwhile
+    return 0
+endfunction
+
+function! RelintIfAlreadyLinting()
+    if QuickFixIsOpen()
+        silent make!
+    endif
+endfunction
+
 set noshowmode
+
+nnoremap <silent> <F5> :silent make!<CR>
 
 "---------------------------------------------
 "-------------------Section-------------------
@@ -359,7 +378,7 @@ augroup MyAutocmds
 
     autocmd QuickFixCmdPost * silent call OpenQuickfix()
 
-    autocmd BufWritePost *.py,*.js silent make!
+    autocmd BufWritePost * silent call RelintIfAlreadyLinting()
 
     "Update tags on write
     autocmd BufWritePost  * silent exe "!UpdateTags.sh ."
