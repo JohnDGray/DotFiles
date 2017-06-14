@@ -84,12 +84,12 @@ let g:netrw_liststyle=3
 "------------------Shortcuts------------------
 "---------------------------------------------
 "replace word with whatever is in the 0 register (last yank even after delete)
-nnoremap <leader>rep ciw<C-r>0<ESC>
-nnoremap <leader>Rep ciW<C-r>0<ESC>
+nnoremap <leader>rp ciw<C-r>0<ESC>
+nnoremap <leader>Rp ciW<C-r>0<ESC>
 
 "capitalize word
-nnoremap <leader>cap maviwgU`a
-nnoremap <leader>Cap maviWgU`a
+nnoremap <leader>cp maviwgU`a
+nnoremap <leader>Cp maviWgU`a
 
 "easier window navigation
 nnoremap <leader>w <C-w>
@@ -358,17 +358,17 @@ augroup MyAutocmds
     "------javascript------
     "----------------------
     "run program
-    autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
+    autocmd FileType javascript nnoremap <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
-    autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
+    autocmd FileType javascript nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
 
     "----------------------
     "--------python--------
     "----------------------
     "run program
-    autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>rn :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
-    autocmd FileType python nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!python % \| less<CR>
+    autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python % \| less<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
@@ -376,9 +376,9 @@ augroup MyAutocmds
     "---------sql----------
     "----------------------
     "try script
-    "autocmd FileType sql nnoremap <buffer> <leader>try :!psql <<<dbname>>> -f %<CR>
+    "autocmd FileType sql nnoremap <buffer> <leader>t :!psql <<<dbname>>> -f %<CR>
     "run script
-    autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
+    "autocmd FileType sql nnoremap <buffer> <leader>rn :!RunQuery.sh dbname % file.csv
 
     "----------------------
     "-----------c----------
