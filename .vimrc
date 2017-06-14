@@ -1,12 +1,19 @@
-"------------------------------
-"-----------Section------------
-"-----------General------------
-"------------------------------
+"---------------------------------------------
+"-------------------Section-------------------
+"-------------------Settings------------------
+"---------------------------------------------
 "manage plugins
 execute pathogen#infect()
 
 "leader
 let mapleader = "\<SPACE>"
+
+"color scheme and syntax highlighting stuff
+syntax enable
+set background=dark
+let g:gruvbox_contrast_dark="hard"
+colorscheme gruvbox
+hi Normal ctermbg=NONE
 
 "leave buffers without saving
 set hidden
@@ -17,18 +24,13 @@ set scrolloff=9999
 "use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
 
-"replace word with whatever is in the 0 register
-nnoremap <leader>rep ciw<C-r>0<ESC>
-nnoremap <leader>Rep ciW<C-r>0<ESC>
-
 "tab stuff
 set tabstop=4
 set shiftwidth=4
 set expandtab
 
-"capitalize last word
-nnoremap <leader>cap maviwgU`a
-nnoremap <leader>Cap maviWgU`a
+"indent at same level as last line
+set autoindent
 
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
@@ -46,31 +48,59 @@ set statusline+=%{getcwd()}
 "highlight search matches as I type
 set incsearch
 
-"color scheme and syntax highlighting stuff
-syntax enable
-set background=dark
-let g:gruvbox_contrast_dark="hard"
-colorscheme gruvbox
-hi Normal ctermbg=NONE
-
 "show line numbers
 set number
-"set relativenumber
 
-"indent at same level as last line
-set autoindent
-
+"use filetype information
 filetype plugin indent on
 
-"Completion
+"completion
 set completeopt=longest,menuone
-inoremap <expr> <NUL> Auto_complete_string()
-nnoremap <silent> <F10> :call Toggle_Def()<CR>
-inoremap <silent> <expr> <F10> "\<ESC>:call Toggle_Def()\<CR>a"
+
+"fold using syntax (except for python: see below)
+set foldmethod=syntax
+"only one level of folding
+set foldnestmax=1       
+"don't show folds initially
+set foldlevelstart=20   
+
+"recursive file searches
+set path+=**
+
+"display all matching files when we tab complete
+set wildmenu
+
+"search parent directories for tags as well
+set tags=./tags,tags;
+
+"netrw
+"disable banner
+let g:netrw_banner=0   
+"use tree view
+let g:netrw_liststyle=3
+
+"---------------------------------------------
+"-------------------Section-------------------
+"------------------Shortcuts------------------
+"---------------------------------------------
+"replace word with whatever is in the 0 register (last yank even after delete)
+nnoremap <leader>rep ciw<C-r>0<ESC>
+nnoremap <leader>Rep ciW<C-r>0<ESC>
+
+"capitalize word
+nnoremap <leader>cap maviwgU`a
+nnoremap <leader>Cap maviWgU`a
+
+"easier window navigation
+nnoremap <leader>w <C-w>
+
+"tag/definition window
+nnoremap <silent> <F10> :call ToggleDefWindow()<CR>
+inoremap <silent> <expr> <F10> "\<ESC>:call ToggleDefWindow()\<CR>a"
 
 let g:definition_displayed=0
 
-function! Toggle_Def()
+function! ToggleDefWindow()
     if g:definition_displayed
         let g:definition_displayed=0
         if winnr('$') > 1
@@ -84,113 +114,69 @@ function! Toggle_Def()
             normal! b
             let word = expand("<cword>")
         endif
-        while col('.') > 1
+        while 1
             try 
                 exe "stj " . word
                 let g:definition_displayed=1
                 wincmd p
                 break   
             catch
+                if col('.') == 1
+                    break
+                endif
                 normal! b
                 let word = expand("<cword>")
             endtry
         endwhile
-        if !g:definition_displayed
-            try 
-                exe "stj " . word
-                let g:definition_displayed=1
-                wincmd p
-            catch
-            endtry
-        endif
         normal! `a
         if !g:definition_displayed
             echo "Could not display definition"
         endif
     endif
 endfunction
-        
 
-function! Auto_complete_string()
+"tag completion
+inoremap <expr> <NUL> AutoCompleteString()
+
+function! AutoCompleteString()
     if pumvisible()
         return "\<Down>"
     else
-        return "\<C-x>\<C-]>\<C-r>=Auto_complete_opened()\<CR>"
+        return "\<C-x>\<C-]>\<C-r>=AutoCompleteOpened()\<CR>"
     end
 endfunction
 
-function! Auto_complete_opened()
+function! AutoCompleteOpened()
     if pumvisible()
         return "\<Down>"
     end
     return ""
 endfunction
 
-"fold using syntax (except for python: see below)
-set foldmethod=syntax
-
-"only one level of folding
-set foldnestmax=1       
-"don't show folds initially
-set foldlevelstart=20   
-
-"search down into subfolders
-"provides tab-completion for all file-related tasks
-set path+=**
-
-"display all matching files when we tab complete
-set wildmenu
-
-"Create/Update tags
+"create/update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
 
-"Search parent directories for tags as well
-set tags=./tags,tags;
-
-"Google word shortcut
+"show documentation
 nnoremap K :call GetDocs()<CR>
 
 function! GetDocs()
-    let ss = "https://www.google.com/search?q="
-    if (&ft == "python")
-        let ss = "https://docs.python.org/3/search.html?q="
-    elseif (&ft == "javascript" || &ft == "html" || &ft == "css")
-        let ss = "https://developer.mozilla.org/en-US/search?q="
+    let urls = {"python": "https://docs.python.org/3/search.html?q=", "javascript": "https://developer.mozilla.org/en-US/search?q=", "html": "https://developer.mozilla.org/en-US/search?q=", "css": "https://developer.mozilla.org/en-US/search?q=",}
+    if has_key(urls, &ft)
+        let ss = urls[&ft]
     else
-        let ss = ss . GetLanguage()
+        let ss = "https://www.google.com/search?q=" . &ft . "+"
     endif
     let ss = ss . expand("<cword>")
-    let ss = substitute(ss, "(", "\\\\(", "g") 
-    let ss = substitute(ss, ")", "\\\\)", "g") 
-    let ss = substitute(ss, "<", "\\\\<", "g") 
-    let ss = substitute(ss, ">", "\\\\>", "g") 
-    let ss = substitute(ss, "|", "\\\\|", "g") 
-    let ss = substitute(ss, "!", "\\\\!", "g") 
-    let ss = substitute(ss, "&", "\\\\&", "g") 
-    let ss = substitute(ss, ";", "\\\\;", "g") 
-    exe "silent !firefox -P alt " . ss . " &"
+
+    "Open a new firefox instance (create a second profile and use it instead of 'alt'):
+    exe 'silent !firefox -P alt ' . '"' . ss . '"' . ' &'
+
+    ""Use an existing firefox instance:
+    "exe 'silent !firefox ' . '"' . ss . '"' . ' &'
 endfunction
 
-function! GetLanguage()
-    let result = ""
-    if (&ft == "sh")
-        let result = "bash"
-    else
-        let result = "" . &ft
-    endif
-    if result != ""
-        let result = result . "+"
-    endif
-    return result
-endfunction 
-
-"file navigation with netrw
-"quick toggle
+"netrw quick toggle
 nnoremap <leader>ee :call ToggleNetrw()<CR>
-"disable banner
-let g:netrw_banner=0   
-"use tree view
-let g:netrw_liststyle=3
 
 function! ToggleNetrw()
     let lex = 1
@@ -210,15 +196,12 @@ endfunction
 "delete buffer without closing window
 nnoremap <leader>bd :b#\|bd #<CR>
 "close all open buffers except current buffer
-nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent(0)<CR>
+nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent()<CR>
 
-function! CloseAllBuffersButCurrent(force)
+function! CloseAllBuffersButCurrent()
     let curr = bufnr("%")
     let i = bufnr("$")
     let cmd = "bd"
-    if a:force
-        let cmd = cmd."!"
-    endif
     while i >= 1
         if curr != i && buflisted(i)
             exe "".cmd.i
@@ -229,21 +212,18 @@ function! CloseAllBuffersButCurrent(force)
 endfunction
 
 "commenting
-nnoremap <silent> <leader>cm :<C-U>call AddComment(0)<CR>
-vnoremap <silent> <leader>cm :<C-U>call AddComment(1)<CR>
-nnoremap <silent> <leader>uc :<C-U>call RemoveComment(0)<CR>
-vnoremap <silent> <leader>uc :<C-U>call RemoveComment(1)<CR>
+nnoremap <silent> <leader>cc :<C-U>call AddComment(0)<CR>
+vnoremap <silent> <leader>cc :<C-U>call AddComment(1)<CR>
+nnoremap <silent> <leader>cu :<C-U>call RemoveComment(0)<CR>
+vnoremap <silent> <leader>cu :<C-U>call RemoveComment(1)<CR>
 
 function! GetComment()
-    let comment = "#"
-    if &ft == "sql"
-        let comment = "--"
-    elseif &ft == "vim"
-        let comment = "\""
-    elseif index(["java", "javascript", "c"], &ft) > -1
-        let comment = "//"
+    let comments = {"vim": "\"", "python": "# ", "sql": "--", "javascript": "//", "java": "//", "c": "//",}
+    if has_key(comments, &ft)
+        return comments[&ft]
+    else
+        return "#"
     endif
-    return comment
 endfunction
 
 function! AddComment(from_visual)
@@ -257,11 +237,11 @@ function! AddComment(from_visual)
     else
         let command = command . "."
         if vcount && vcount > 1
-            let command = command . ",+" . string(vcount - 1)
+            let command = command . ",+" . string(min([(vcount - 1), (line('$') - line('.'))]))
         endif
     endif
     let comment = GetComment()
-    let command = command . "norm i" . comment
+    let command = command . "norm I" . comment
     exe command
     if a:from_visual
         normal! gv
@@ -282,7 +262,7 @@ function! RemoveComment(from_visual)
     else
         let command = command . "."
         if vcount && vcount > 1
-            let command = command . ",+" . string(vcount - 1)
+            let command = command . ",+" . string(min([(vcount - 1), (line('$') - line('.'))]))
         endif
     endif
     let comment = GetComment()
@@ -306,8 +286,8 @@ endfunction
 "make/linting shortcut
 nnoremap <silent> <F5> :silent make!<CR> <C-l>
 
-function! OpenQuickfix()
-    if ! empty(getqflist())
+function! ToggleQuickFix()
+    if !empty(getqflist())
         copen
         redraw!
         wincmd p
@@ -337,7 +317,7 @@ endfunction
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
-"set ultisnips triggers
+"ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
@@ -349,7 +329,11 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 augroup MyAutocmds
     au!
 
-    autocmd QuickFixCmdPost * silent call OpenQuickfix()
+    "remove preview window after auto-completion
+    autocmd CompleteDone * pclose
+
+    "toggle quickfix window when quickfix list is changed
+    autocmd QuickFixCmdPost * silent call ToggleQuickFix()
 
     autocmd BufWritePost * silent call RelintIfAlreadyLinting()
 
@@ -362,25 +346,25 @@ augroup MyAutocmds
     "resize windows when vim is resized
     autocmd VimResized * wincmd =
 
-    "-------------
-    "---au-html---
-    "-------------
+    "----------------------
+    "---------html---------
+    "----------------------
     "skeleton
     autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
     autocmd FileType html inoremap <buffer> <C-f> </<C-x><C-o>
 
-    "-------------------
-    "---au-javascript---
-    "-------------------
+    "----------------------
+    "------javascript------
+    "----------------------
     "run program
     autocmd FileType javascript nnoremap <buffer> <leader>run :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>lrun :!clear <CR><CR>:!nodejs % \| less<CR>
 
-    "---------------
-    "---au-python---
-    "---------------
+    "----------------------
+    "--------python--------
+    "----------------------
     "run program
     autocmd FileType python nnoremap <buffer> <leader>run :!clear <CR><CR>:!python %<CR>
     "run program and pipe output to less
@@ -388,20 +372,18 @@ augroup MyAutocmds
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
-    "------------
-    "---au-sql---
-    "------------
+    "----------------------
+    "---------sql----------
+    "----------------------
     "try script
     "autocmd FileType sql nnoremap <buffer> <leader>try :!psql <<<dbname>>> -f %<CR>
     "run script
     autocmd FileType sql nnoremap <buffer> <leader>run :!RunQuery.sh dbname % file.csv
 
+    "----------------------
+    "-----------c----------
+    "----------------------
     "c
     "skeleton
     autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
-
-    "remove preview window after auto-completion
-    autocmd CompleteDone * pclose
-
-
 augroup END
