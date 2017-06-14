@@ -17,17 +17,6 @@ set scrolloff=9999
 "use bash aliases so that 'python' = python3
 let $BASH_ENV = "~/.bash_aliases"
 
-"easier (un)indenting of code blocks
-vnoremap < <gv
-vnoremap > >gv
-
-"easier window navigation
-nnoremap <leader>wp <C-w>p
-nnoremap <leader>wh <C-w>h
-nnoremap <leader>wj <C-w>j
-nnoremap <leader>wk <C-w>k
-nnoremap <leader>wl <C-w>l
-
 "replace word with whatever is in the 0 register
 nnoremap <leader>rep ciw<C-r>0<ESC>
 nnoremap <leader>Rep ciW<C-r>0<ESC>
@@ -43,7 +32,7 @@ nnoremap <leader>Cap maviWgU`a
 
 "treat all numerals as decimal, even if prefixed with 0s
 set nrformats=
-
+ 
 "make splitting more natural
 set splitbelow
 set splitright
@@ -63,7 +52,6 @@ set background=dark
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal ctermbg=NONE
-set cursorline
 
 "show line numbers
 set number
@@ -138,7 +126,7 @@ function! Auto_complete_opened()
     return ""
 endfunction
 
-"fold using syntax normally
+"fold using syntax (except for python: see below)
 set foldmethod=syntax
 
 "only one level of folding
@@ -153,7 +141,7 @@ set path+=**
 "display all matching files when we tab complete
 set wildmenu
 
-"Update tags
+"Create/Update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
 
 "Search parent directories for tags as well
@@ -218,11 +206,6 @@ function! ToggleNetrw()
         :Lexplore
     endif
 endfunction
-
-"quickfix shortcuts
-nnoremap <leader>cf :cfirst<CR>
-nnoremap <leader>cn :cnext<CR>
-nnoremap <leader>cp :cprevious<CR>
 
 "delete buffer without closing window
 nnoremap <leader>bd :b#\|bd #<CR>
@@ -320,6 +303,7 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
+"make/linting shortcut
 nnoremap <silent> <F5> :silent make!<CR> <C-l>
 
 function! OpenQuickfix()
@@ -384,13 +368,7 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
-    autocmd FileType html nnoremap <buffer> <leader>f a</<C-x><C-o><ESC>F<i
-    "align tags vertically and position cursor on line in between
-    autocmd FileType html nnoremap <buffer> <leader><CR> f<<ESC>i<CR><CR><ESC>k<ESC>I<TAB>
-    "jump past next tag
-    autocmd FileType html nnoremap <buffer> <leader><leader> /><CR>l
-    "jump past previous tag
-    autocmd FileType html nnoremap <buffer> <NUL><NUL> ?<<CR>?><CR>l
+    autocmd FileType html inoremap <buffer> <C-f> </<C-x><C-o>
 
     "-------------------
     "---au-javascript---
