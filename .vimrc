@@ -94,15 +94,21 @@ nnoremap <leader>Cp maviWgU`a
 "easier window navigation
 nnoremap <leader>w <C-w>
 
-"tag/definition window
-nnoremap <silent> <F10> :call ToggleDefWindow()<CR>
-inoremap <silent> <expr> <F10> "\<ESC>:call ToggleDefWindow()\<CR>a"
+"'make' shortcut
+nnoremap <silent> <F5> :silent make!<CR> <C-l>
 
-let g:definition_displayed=0
+"create/update tags
+command! MakeTags !ctags -Rnu --exclude=.git .
 
-function! ToggleDefWindow()
-    if g:definition_displayed
-        let g:definition_displayed=0
+"tag window
+nnoremap <silent> <F10> :call ToggleTagWindow()<CR>
+inoremap <silent> <expr> <F10> "\<ESC>:call ToggleTagWindow()\<CR>a"
+
+let g:tag_window_displayed=0
+
+function! ToggleTagWindow()
+    if g:tag_window_displayed
+        let g:tag_window_displayed=0
         if winnr('$') > 1
             wincmd p
             q
@@ -117,7 +123,7 @@ function! ToggleDefWindow()
         while 1
             try 
                 exe "stj " . word
-                let g:definition_displayed=1
+                let g:tag_window_displayed=1
                 wincmd p
                 break   
             catch
@@ -129,8 +135,8 @@ function! ToggleDefWindow()
             endtry
         endwhile
         normal! `a
-        if !g:definition_displayed
-            echo "Could not display definition"
+        if !g:tag_window_displayed
+            echo "Could not display tag"
         endif
     endif
 endfunction
@@ -152,9 +158,6 @@ function! AutoCompleteOpened()
     end
     return ""
 endfunction
-
-"create/update tags
-command! MakeTags !ctags -Rnu --exclude=.git .
 
 "show documentation
 nnoremap K :call GetDocs()<CR>
@@ -283,9 +286,6 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-"make/linting shortcut
-nnoremap <silent> <F5> :silent make!<CR> <C-l>
-
 function! ToggleQuickFix()
     if !empty(getqflist())
         copen
@@ -328,6 +328,9 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 "---------------------------------------------
 augroup MyAutocmds
     au!
+
+    autocmd BufEnter * set mouse=
+    autocmd BufEnter * set ttymouse=
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
