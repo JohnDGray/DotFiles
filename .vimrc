@@ -2,6 +2,7 @@
 "-------------------Section-------------------
 "-------------------Settings------------------
 "---------------------------------------------
+
 "manage plugins
 execute pathogen#infect()
 
@@ -58,7 +59,7 @@ filetype plugin indent on
 set completeopt=longest,menuone
 
 "fold using syntax (except for python: see below)
-set foldmethod=syntax
+set foldmethod=indent
 "only one level of folding
 set foldnestmax=1       
 "don't show folds initially
@@ -142,17 +143,17 @@ function! ToggleTagWindow()
 endfunction
 
 "tag completion
-inoremap <expr> <NUL> AutoCompleteString()
+inoremap <expr> <NUL> CompleteString()
 
-function! AutoCompleteString()
+function! CompleteString()
     if pumvisible()
         return "\<Down>"
     else
-        return "\<C-x>\<C-]>\<C-r>=AutoCompleteOpened()\<CR>"
+        return "\<C-x>\<C-o>\<C-r>=CompleteOpened()\<CR>"
     end
 endfunction
 
-function! AutoCompleteOpened()
+function! CompleteOpened()
     if pumvisible()
         return "\<Down>"
     end
@@ -244,7 +245,7 @@ function! AddComment(from_visual)
         endif
     endif
     let comment = GetComment()
-    let command = command . "norm I" . comment
+    let command = command . "norm i" . comment
     exe command
     if a:from_visual
         normal! gv
@@ -329,9 +330,6 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 augroup MyAutocmds
     au!
 
-    autocmd BufEnter * set mouse=
-    autocmd BufEnter * set ttymouse=
-
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
 
@@ -369,9 +367,9 @@ augroup MyAutocmds
     "--------python--------
     "----------------------
     "run program
-    autocmd FileType python nnoremap <buffer> <leader>rn :!clear <CR><CR>:!python %<CR>
+    autocmd FileType python nnoremap <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
     "run program and pipe output to less
-    autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python % \| less<CR>
+    autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
