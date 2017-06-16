@@ -142,26 +142,43 @@ function! ToggleTagWindow()
     endif
 endfunction
 
+"for use with language-aware definition jump tools
+function! ToggleDefWindow(func)
+    if g:tag_window_displayed
+        let g:tag_window_displayed=0
+        if winnr('$') > 1
+            wincmd p
+            q
+        endif
+    else
+        let g:tag_window_displayed=1
+        spl
+        exe a:func
+        wincmd p
+    endif
+endfunction
+
 "tag completion
 inoremap <expr> <NUL> CompleteString()
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 function! CompleteString()
     if pumvisible()
-        return "\<Down>"
+        return "\<C-n>"
     else
         return "\<C-x>\<C-o>\<C-r>=CompleteOpened()\<CR>"
-    end
+    endif
 endfunction
 
 function! CompleteOpened()
     if pumvisible()
         return "\<Down>"
-    end
+    endif
     return ""
 endfunction
 
 "show documentation
-nnoremap K :call GetDocs()<CR>
+nnoremap <leader>K :call GetDocs()<CR>
 
 function! GetDocs()
     let urls = {"python": "https://docs.python.org/3/search.html?q=", "javascript": "https://developer.mozilla.org/en-US/search?q=", "html": "https://developer.mozilla.org/en-US/search?q=", "css": "https://developer.mozilla.org/en-US/search?q=",}
@@ -314,6 +331,7 @@ function! RelintIfAlreadyLinting()
     endif
 endfunction
 
+set noshowmode
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
@@ -322,6 +340,14 @@ endfunction
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#show_call_signatures = "2"
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#goto_command = ""
+let g:jedi#completions_command = ""
+let g:jedi#rename_command = ""
 
 "---------------------------------------------
 "-------------------Section-------------------
@@ -362,6 +388,10 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
+    "tern go to definition
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>d :call ToggleDefWindow("TernDef")<CR>
+    "tern documentation
+    autocmd FileType javascript nnoremap <silent> <buffer> K :TernDoc<CR>
 
     "----------------------
     "--------python--------
@@ -372,6 +402,8 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
+    "jedi go to definition
+    autocmd FileType python nnoremap <silent> <buffer> <leader>d :call ToggleDefWindow("call jedi#goto()")<CR>
 
     "----------------------
     "---------sql----------
