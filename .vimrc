@@ -96,7 +96,7 @@ nnoremap <leader>Cp maviWgU`a
 nnoremap <leader>w <C-w>
 
 "'make' shortcut
-nnoremap <silent> <F5> :silent make!<CR> <C-l>
+nnoremap <silent> <F5> :w \| silent make!<CR>
 
 "create/update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
@@ -320,14 +320,14 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
-function! ToggleQuickFix()
+function! RefreshQuickFix()
     if !empty(getqflist())
         copen
-        redraw!
         wincmd p
     else
         cclose
     endif
+    redraw!
 endfunction
 
 function! QuickFixIsOpen()
@@ -377,7 +377,7 @@ augroup MyAutocmds
     autocmd CompleteDone * pclose
 
     "toggle quickfix window when quickfix list is changed
-    autocmd QuickFixCmdPost * silent call ToggleQuickFix()
+    autocmd QuickFixCmdPost * silent call RefreshQuickFix()
 
     autocmd BufWritePost * silent call RelintIfAlreadyLinting()
 
