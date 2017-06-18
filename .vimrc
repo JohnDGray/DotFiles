@@ -26,7 +26,7 @@ set scrolloff=9999
 let $BASH_ENV = "~/.bash_aliases"
 
 "tab stuff
-set tabstop=4
+set softtabstop=4
 set shiftwidth=4
 set expandtab
 
@@ -117,24 +117,26 @@ function! ToggleTagWindow()
     else
         normal! ma
         let word = expand("<cword>")
-        if !word
+        if word == ""
             normal! b
             let word = expand("<cword>")
         endif
-        while 1
-            try 
-                exe "stj " . word
-                let g:tag_window_displayed=1
-                wincmd p
-                break   
-            catch
-                if col('.') == 1
-                    break
-                endif
-                normal! b
-                let word = expand("<cword>")
-            endtry
-        endwhile
+        if word != ""
+            while 1
+                try 
+                    exe "stj " . word
+                    let g:tag_window_displayed=1
+                    wincmd p
+                    break   
+                catch
+                    if col('.') == 1
+                        break
+                    endif
+                    normal! b
+                    let word = expand("<cword>")
+                endtry
+            endwhile
+        endif
         normal! `a
         if !g:tag_window_displayed
             echo "Could not display tag"
@@ -142,47 +144,16 @@ function! ToggleTagWindow()
     endif
 endfunction
 
-"for use with language-aware definition jump tools
-function! ToggleDefWindow(func)
-    if g:tag_window_displayed
-        let g:tag_window_displayed=0
-        if winnr('$') > 1
-            wincmd p
-            q
-        endif
-    else
-        let g:tag_window_displayed=1
-        spl
-        exe a:func
-        wincmd p
-    endif
-endfunction
-
-let g:doc_window_displayed=0
-
-function! ToggleDocWindow(func)
-    if g:doc_window_displayed
-        let g:doc_window_displayed=0
-        if winnr('$') > 1
-            wincmd p
-            q
-        endif
-    else
-        let g:doc_window_displayed=1
-        silent exe a:func
-    endif
-endfunction
-
 "tag completion
 inoremap <expr> <NUL> CompleteString()
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>(\<ESC>:call ToggleTagWindow()\<CR>a" : "\<C-g>u\<CR>"
+inoremap <expr> ) g:tag_window_displayed ? ")\<ESC>:call ToggleTagWindow()\<CR>a" : ")"
 
 function! CompleteString()
     if pumvisible()
         return "\<C-n>"
     else
-"        return "\<C-x>\<C-o>\<C-r>=CompleteOpened()\<CR>"
-        return "\<C-x>\<C-o>"
+        return "\<C-x>\<C-]>"
     endif
 endfunction
 
@@ -347,7 +318,6 @@ function! RelintIfAlreadyLinting()
     endif
 endfunction
 
-set noshowmode
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
@@ -356,16 +326,6 @@ set noshowmode
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#show_call_signatures = "2"
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#goto_command = ""
-let g:jedi#completions_command = ""
-let g:jedi#rename_command = ""
-let g:jedi#documentation_command = ""
-
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Autocmds------------------
@@ -405,11 +365,6 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
-    "tern go to definition
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>d :call ToggleDefWindow("TernDef")<CR>
-    "tern documentation
-"    autocmd FileType javascript nnoremap <silent> <buffer> K :TernDoc<CR>
-    autocmd FileType javascript nnoremap <silent> <buffer> K :call ToggleDocWindow("TernDoc")<CR>
 
     "----------------------
     "--------python--------
@@ -420,10 +375,6 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
-    "jedi go to definition
-    autocmd FileType python nnoremap <silent> <buffer> <leader>d :call ToggleDefWindow("call jedi#goto()")<CR>
-    "jedi documentation
-    autocmd FileType python nnoremap <silent> <buffer> K :call ToggleDocWindow("call jedi#show_documentation()")<CR>
 
     "----------------------
     "---------sql----------
