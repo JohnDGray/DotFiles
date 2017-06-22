@@ -84,6 +84,7 @@ let g:netrw_liststyle=3
 "-------------------Section-------------------
 "------------------Shortcuts------------------
 "---------------------------------------------
+
 "replace word with whatever is in the 0 register (last yank even after delete)
 nnoremap <leader>rp ciw<C-r>0<ESC>
 nnoremap <leader>Rp ciW<C-r>0<ESC>
@@ -95,7 +96,7 @@ nnoremap <leader>Cp maviWgU`a
 "easier window navigation
 nnoremap <leader>w <C-w>
 
-"'make' shortcut
+"write and make
 nnoremap <silent> <F5> :w \| silent make!<CR>
 
 "create/update tags
@@ -146,7 +147,7 @@ endfunction
 
 "tag completion
 inoremap <expr> <NUL> CompleteString()
-inoremap <expr> <CR> pumvisible() ? "\<C-y>(\<ESC>:call ToggleTagWindow()\<CR>a" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> ) g:tag_window_displayed ? ")\<ESC>:call ToggleTagWindow()\<CR>a" : ")"
 
 function! CompleteString()
@@ -322,14 +323,17 @@ endfunction
 "-------------------Section-------------------
 "-------------------Plugins-------------------
 "---------------------------------------------
+
 "ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Autocmds------------------
 "---------------------------------------------
+
 augroup MyAutocmds
     au!
 
@@ -356,7 +360,9 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
-    autocmd FileType html inoremap <buffer> <C-f> </<C-x><C-o>
+    autocmd FileType html inoremap <buffer> <NUL> </<C-x><C-o><Down><CR>
+    autocmd FileType html inoremap <buffer> <C-f> <ESC>/><CR>a
+    autocmd FileType html inoremap <buffer> <C-b> <ESC>?<<CR>?><CR>a
 
     "----------------------
     "------javascript------
@@ -387,7 +393,14 @@ augroup MyAutocmds
     "----------------------
     "-----------c----------
     "----------------------
-    "c
+    "make sure headers are classified as c files and not cpp files
+    autocmd! BufRead,BufNewFile *.h set filetype=c
     "skeleton
     autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
+    "compile
+    autocmd FileType c nnoremap <buffer> <leader>mk :w<CR>:!clear<CR><CR>:!gcc %<CR>
+    "run program
+    autocmd FileType c nnoremap <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
+    "run program and pipe to less
+    autocmd FileType c nnoremap <buffer> <leader>Rn :!clear<CR><CR>:!valgrind ./a.out \| less<CR>
 augroup END
