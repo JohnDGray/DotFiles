@@ -89,10 +89,6 @@ let g:netrw_liststyle=3
 nnoremap <leader>rp ciw<C-r>0<ESC>
 nnoremap <leader>Rp ciW<C-r>0<ESC>
 
-"capitalize word
-nnoremap <leader>cp maviwgU`a
-nnoremap <leader>Cp maviWgU`a
-
 "easier window navigation
 nnoremap <leader>w <C-w>
 
@@ -187,17 +183,20 @@ endfunction
 "netrw quick toggle
 nnoremap <leader>ee :call ToggleNetrw()<CR>
 
+let g:NetrwIsOpen=0
+
 function! ToggleNetrw()
-    let lex = 1
-    let i = bufnr("$")
-    while (i >= 1)
-        if (getbufvar(i, "&filetype") == "netrw")
-            silent exe "bwipeout ".i
-            let lex = 0
-        endif
-        let i-=1
-    endwhile
-    if lex
+    if g:NetrwIsOpen
+        let i = bufnr("$")
+        while (i >= 1)
+            if (getbufvar(i, "&filetype") == "netrw")
+                silent exe "bwipeout ".i
+            endif
+            let i-=1
+        endwhile
+        let g:NetrwIsOpen=0
+    else
+        let g:NetrwIsOpen=1
         :Lexplore
     endif
 endfunction
