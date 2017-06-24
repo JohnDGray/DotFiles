@@ -85,14 +85,14 @@ let g:netrw_liststyle=3
 "------------------Shortcuts------------------
 "---------------------------------------------
 
+"create/update tags
+command! MakeTags !ctags -Rnu --exclude=.git .
+
 "easier window navigation
 nnoremap <leader>w <C-w>
 
 "write and make
 nnoremap <silent> <F5> :w \| silent make!<CR>
-
-"create/update tags
-command! MakeTags !ctags -Rnu --exclude=.git .
 
 "tag window
 nnoremap <silent> <F10> :call ToggleTagWindow()<CR>
@@ -286,6 +286,17 @@ function! RemoveComment(from_visual)
     endif
 endfunction
 
+function! PythonInstanceVars()
+    normal! ma
+    normal! $
+    call search("def __init__", "b")
+    let start = line(".")
+    call search("^\s*$")
+    let end = line(".") - 1
+    exe start . "," . end . "!python3 ~/bin/PythonInstanceVars.py"
+    normal! `a
+endfunction
+
 function! RefreshQuickFix()
     if !empty(getqflist())
         copen
@@ -373,6 +384,8 @@ augroup MyAutocmds
     autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
+    "insert instance variables
+    autocmd FileType python noremap <silent> <buffer> <leader>va :call PythonInstanceVars()<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
