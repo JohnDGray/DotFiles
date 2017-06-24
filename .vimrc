@@ -85,10 +85,6 @@ let g:netrw_liststyle=3
 "------------------Shortcuts------------------
 "---------------------------------------------
 
-"replace word with whatever is in the 0 register (last yank even after delete)
-nnoremap <leader>rp ciw<C-r>0<ESC>
-nnoremap <leader>Rp ciW<C-r>0<ESC>
-
 "easier window navigation
 nnoremap <leader>w <C-w>
 
@@ -144,7 +140,6 @@ endfunction
 "tag completion
 inoremap <expr> <NUL> CompleteString()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <expr> ) g:tag_window_displayed ? ")\<ESC>:call ToggleTagWindow()\<CR>a" : ")"
 
 function! CompleteString()
     if pumvisible()
@@ -162,7 +157,7 @@ function! CompleteOpened()
 endfunction
 
 "show documentation
-nnoremap <leader>K :call GetDocs()<CR>
+nnoremap <silent> <leader>k :call GetDocs()<CR>
 
 function! GetDocs()
     let urls = {"python": "https://docs.python.org/3/search.html?q=", "javascript": "https://developer.mozilla.org/en-US/search?q=", "html": "https://developer.mozilla.org/en-US/search?q=", "css": "https://developer.mozilla.org/en-US/search?q=",}
@@ -181,7 +176,7 @@ function! GetDocs()
 endfunction
 
 "netrw quick toggle
-nnoremap <leader>ee :call ToggleNetrw()<CR>
+nnoremap <silent> <leader>ee :call ToggleNetrw()<CR>
 
 let g:NetrwIsOpen=0
 
@@ -197,12 +192,12 @@ function! ToggleNetrw()
         let g:NetrwIsOpen=0
     else
         let g:NetrwIsOpen=1
-        :Lexplore
+        :silent Lexplore
     endif
 endfunction
 
 "delete buffer without closing window
-nnoremap <leader>bd :b#\|bd #<CR>
+nnoremap <silent> <leader>bd :b#\|bd #<CR>
 "close all open buffers except current buffer
 nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent()<CR>
 
@@ -359,25 +354,25 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
-    autocmd FileType html inoremap <buffer> <NUL> </<C-x><C-o><Down><CR>
-    autocmd FileType html inoremap <buffer> <C-f> <ESC>/><CR>a
-    autocmd FileType html inoremap <buffer> <C-b> <ESC>?<<CR>?><CR>a
+    autocmd FileType html inoremap <silent> <buffer> <NUL> </<C-x><C-o><Down><CR>
+    autocmd FileType html inoremap <silent> <buffer> <C-f> <ESC>/><CR>a
+    autocmd FileType html inoremap <silent> <buffer> <C-b> <ESC>?<<CR>?><CR>a
 
     "----------------------
     "------javascript------
     "----------------------
     "run program
-    autocmd FileType javascript nnoremap <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
-    autocmd FileType javascript nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
 
     "----------------------
     "--------python--------
     "----------------------
     "run program
-    autocmd FileType python nnoremap <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
     "run program and pipe output to less
-    autocmd FileType python nnoremap <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
@@ -397,9 +392,9 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
     "compile
-    autocmd FileType c nnoremap <buffer> <leader>mk :w<CR>:!clear<CR><CR>:!gcc %<CR>
+    autocmd FileType c nnoremap <silent> <buffer> <leader>mk :w<CR>:!clear<CR><CR>:!gcc %<CR>
     "run program
-    autocmd FileType c nnoremap <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
+    autocmd FileType c nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
     "run program and pipe to less
-    autocmd FileType c nnoremap <buffer> <leader>Rn :!clear<CR><CR>:!valgrind ./a.out \| less<CR>
+    autocmd FileType c nnoremap <silent> <buffer> <leader>Rn :!clear<CR><CR>:!valgrind ./a.out \| less<CR>
 augroup END
