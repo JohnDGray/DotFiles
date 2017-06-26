@@ -185,14 +185,14 @@ function! ToggleNetrw()
         let i = bufnr("$")
         while (i >= 1)
             if (getbufvar(i, "&filetype") == "netrw")
-                silent exe "bwipeout ".i
+                silent exe "bwipeout " . i
             endif
             let i-=1
         endwhile
         let g:NetrwIsOpen=0
     else
         let g:NetrwIsOpen=1
-        :silent Lexplore
+        silent Lexplore
     endif
 endfunction
 
@@ -289,11 +289,22 @@ endfunction
 function! PythonInstanceVars()
     normal! ma
     normal! $
-    call search("def __init__", "b")
-    let start = line(".")
-    call search("^\s*$")
-    let end = line(".") - 1
-    exe start . "," . end . "!python3 ~/bin/PythonInstanceVars.py"
+    try
+        call search("def __init__", "b")
+        let start = line(".")
+    catch
+        normal! `a
+        return
+    endtry
+    call search("^\s*$", "W")
+    if line(".") != start
+        let end = line(".") - 1
+    else
+        normal! G
+        let end = line(".")
+    endif
+    let command = start . "," . end . " !python3 ~/bin/PythonInstanceVars.py" 
+    silent exe command
     normal! `a
 endfunction
 
