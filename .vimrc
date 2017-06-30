@@ -16,6 +16,9 @@ let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 hi Normal ctermbg=NONE
 
+"use filetype information
+filetype plugin indent on
+
 "leave buffers without saving
 set hidden
 
@@ -23,7 +26,8 @@ set hidden
 set scrolloff=9999
 
 "use bash aliases so that 'python' = python3
-let $BASH_ENV = "~/.bash_aliases"
+"let $BASH_ENV = "~/.bash_aliases"
+let $BASH_ENV = "~/.bashrc"
 
 "tab stuff
 set softtabstop=4
@@ -42,8 +46,10 @@ set splitright
 
 "always show status
 set laststatus=2
+"include buffer number and file name in status line
 set statusline+=%n\ %F
 set statusline+=%=
+"include working directoryin status line
 set statusline+=%{getcwd()}
 
 "highlight search matches as I type
@@ -52,13 +58,10 @@ set incsearch
 "show line numbers
 set number
 
-"use filetype information
-filetype plugin indent on
-
-"completion
+"use completion menu even for just one match; insert only the longest common match among choices
 set completeopt=longest,menuone
 
-"fold using syntax (except for python: see below)
+"fold using indentation
 set foldmethod=indent
 "only one level of folding
 set foldnestmax=1       
@@ -68,7 +71,7 @@ set foldlevelstart=20
 "recursive file searches
 set path+=**
 
-"display all matching files when we tab complete
+"display all matching files when I tab complete
 set wildmenu
 
 "search parent directories for tags as well
@@ -149,13 +152,6 @@ function! CompleteString()
     endif
 endfunction
 
-function! CompleteOpened()
-    if pumvisible()
-        return "\<Down>"
-    endif
-    return ""
-endfunction
-
 "show documentation
 nnoremap <silent> <leader>k :call GetDocs()<CR>
 
@@ -168,7 +164,7 @@ function! GetDocs()
     endif
     let ss = ss . expand("<cword>")
 
-    "Open a new firefox instance (create a second profile and use it instead of 'alt'):
+    "Open a new firefox instance (you should create a second profile and use it instead of 'alt'):
     exe 'silent !firefox -P alt ' . '"' . ss . '"' . ' &'
 
     ""Use an existing firefox instance:
@@ -204,10 +200,9 @@ nnoremap <silent> <leader>bo :call CloseAllBuffersButCurrent()<CR>
 function! CloseAllBuffersButCurrent()
     let curr = bufnr("%")
     let i = bufnr("$")
-    let cmd = "bd"
     while i >= 1
-        if curr != i && buflisted(i)
-            exe "".cmd.i
+        if i != curr && buflisted(i)
+            exe "bd " . i
         endif
         let i-=1
     endwhile
