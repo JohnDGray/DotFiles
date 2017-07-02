@@ -384,17 +384,17 @@ augroup MyAutocmds
     "------javascript------
     "----------------------
     "run program
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :w<CR>:!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :w<CR>:!clear <CR><CR>:!nodejs % \| less<CR>
 
     "----------------------
     "--------python--------
     "----------------------
     "run program
-    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :w<CR>:!clear <CR><CR>:!python3 %<CR>
     "run program and pipe output to less
-    autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :w<CR>:!clear <CR><CR>:!python3 % \| less<CR>
     "insert instance variables
     autocmd FileType python noremap <silent> <buffer> <leader>va :call PythonInstanceVars()<CR>
     "fold by indentation
@@ -426,5 +426,5 @@ augroup MyAutocmds
     "-----------c----------
     "----------------------
     "run in repl
-    autocmd! FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
+    autocmd! FileType scheme nnoremap <silent> <buffer> <leader>rn :w<CR>:!clear <CR><CR>:!csi %<CR>
 augroup END
