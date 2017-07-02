@@ -52,8 +52,13 @@ set statusline+=%=
 "include working directoryin status line
 set statusline+=%{getcwd()}
 
+"highlighting
 "highlight search matches as I type
 set incsearch
+"highlight all matches
+set hlsearch
+"turn off hlsearch when redrawing
+nnoremap <C-l> :nohlsearch<CR><C-l>
 
 "show line numbers
 set number
@@ -416,4 +421,10 @@ augroup MyAutocmds
     autocmd FileType c nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
     "run program and pipe to less
     autocmd FileType c nnoremap <silent> <buffer> <leader>Rn :!clear<CR><CR>:!valgrind ./a.out \| less<CR>
+
+    "----------------------
+    "-----------c----------
+    "----------------------
+    "run in repl
+    autocmd! FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
 augroup END
