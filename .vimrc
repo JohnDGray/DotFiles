@@ -148,6 +148,7 @@ endfunction
 "tag completion
 inoremap <expr> <NUL> CompleteString()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<C-n>\<C-n>"
 
 function! CompleteString()
     if pumvisible()
