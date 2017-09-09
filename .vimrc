@@ -3,6 +3,10 @@
 "-------------------Settings------------------
 "---------------------------------------------
 
+set backspace=indent,eol,start
+
+set noerrorbells visualbell t_vb=
+
 "manage plugins
 execute pathogen#infect()
 
@@ -353,6 +357,8 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 augroup MyAutocmds
     au!
+
+    autocmd GUIEnter * set noerrorbells visualbell t_vb=
 
     "remove preview window after auto-completion
     autocmd CompleteDone * pclose
