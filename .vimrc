@@ -100,9 +100,6 @@ let g:netrw_liststyle=3
 "create/update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
 
-"easier window navigation
-nnoremap <leader>w <C-w>
-
 "write and make
 nnoremap <silent> <F5> :w \| silent make!<CR>
 
@@ -149,7 +146,7 @@ function! ToggleTagWindow()
     endif
 endfunction
 
-"tag completion
+"omni completion
 inoremap <expr> <NUL> CompleteString()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<C-n>\<C-n>"
@@ -158,7 +155,7 @@ function! CompleteString()
     if pumvisible()
         return "\<C-n>"
     else
-        return "\<C-x>\<C-]>"
+        return "\<C-x>\<C-o>"
     endif
 endfunction
 
@@ -313,33 +310,6 @@ function! PythonInstanceVars()
     normal! `a
 endfunction
 
-function! RefreshQuickFix()
-    if !empty(getqflist())
-        copen
-        wincmd p
-    else
-        cclose
-    endif
-    redraw!
-endfunction
-
-function! QuickFixIsOpen()
-    let i = winnr("$")
-    while i >= 0
-        if getbufvar(winbufnr(i), '&buftype') == 'quickfix'
-            return 1
-        endif
-        let i -= 1
-    endwhile
-    return 0
-endfunction
-
-function! RelintIfAlreadyLinting()
-    if QuickFixIsOpen()
-        silent make!
-    endif
-endfunction
-
 "---------------------------------------------
 "-------------------Section-------------------
 "-------------------Plugins-------------------
@@ -349,6 +319,17 @@ endfunction
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+"syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
 
 "---------------------------------------------
 "-------------------Section-------------------
@@ -361,15 +342,7 @@ augroup MyAutocmds
     autocmd GUIEnter * set noerrorbells visualbell t_vb=
 
     "remove preview window after auto-completion
-    autocmd CompleteDone * pclose
-
-    "toggle quickfix window when quickfix list is changed
-    autocmd QuickFixCmdPost * silent call RefreshQuickFix()
-
-    autocmd BufWritePost * silent call RelintIfAlreadyLinting()
-
-    "Update tags on write
-    autocmd BufWritePost  * silent exe "!UpdateTags.sh ."
+"    autocmd CompleteDone * pclose
 
     "no autocomment on next line after comment
     autocmd FileType * set formatoptions-=c formatoptions-=r formatoptions-=o 
@@ -394,6 +367,10 @@ augroup MyAutocmds
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :w<CR>:!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :w<CR>:!clear <CR><CR>:!nodejs % \| less<CR>
+    "tern jump to definition
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>d :TernDef<Cr>
+    "tern documentation
+    autocmd FileType javascript nnoremap <silent> <buffer> <S-k> :TernDoc<Cr>
 
     "----------------------
     "--------python--------
@@ -403,7 +380,7 @@ augroup MyAutocmds
     "run program and pipe output to less
     autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :w<CR>:!clear <CR><CR>:!python3 % \| less<CR>
     "insert instance variables
-    autocmd FileType python noremap <silent> <buffer> <leader>va :call PythonInstanceVars()<CR>
+    "autocmd FileType python noremap <silent> <buffer> <leader>va :call PythonInstanceVars()<CR>
     "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
 
@@ -420,8 +397,6 @@ augroup MyAutocmds
     "----------------------
     "make sure headers are classified as c files and not cpp files
     autocmd! BufRead,BufNewFile *.h set filetype=c
-    "skeleton
-    autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
     "compile
     autocmd FileType c nnoremap <silent> <buffer> <leader>mk :w<CR>:!clear<CR><CR>:!gcc %<CR>
     "run program
