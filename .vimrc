@@ -101,7 +101,12 @@ let g:netrw_liststyle=3
 nnoremap / /\v
 nnoremap s/ s/\v
 
-"Trim Lines
+"delete blank lines
+nnoremap <leader>db :%g/\v^\s*$/d<CR>
+vnoremap <leader>db :g/\v^\s*$/d<CR>
+
+"trim Lines
+nnoremap <leader>tr :%s/\v(^\s+)\|(\s+$)//g<CR>
 vnoremap <leader>tr :s/\v(^\s+)\|(\s+$)//g<CR>
 
 "create/update tags
