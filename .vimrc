@@ -97,6 +97,13 @@ let g:netrw_liststyle=3
 "------------------Shortcuts------------------
 "---------------------------------------------
 
+"always use very magic
+nnoremap / /\v
+nnoremap s/ s/\v
+
+"Trim Lines
+vnoremap <leader>tr :s/\v(^\s+)\|(\s+$)//g<CR>
+
 "create/update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
 
