@@ -375,6 +375,8 @@ augroup MyAutocmds
     "----------------------
     "------javascript------
     "----------------------
+    "skeleton
+    autocmd BufNewFile *.js 0r $HOME/.vim/.skeleton.js
     "run program
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :w<CR>:!clear <CR><CR>:!nodejs %<CR>
     "run program and pipe to less
