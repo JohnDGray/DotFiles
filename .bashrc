@@ -1,6 +1,8 @@
 #turn off flow control
 stty -ixon
 
+set -o vi
+
 #custom prompt
 PS1="\[\033[1;32m\]<\W>$ \[\033[0;37m\]"
 export PS1
