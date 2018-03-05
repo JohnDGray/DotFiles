@@ -115,6 +115,9 @@ command! MakeTags !ctags -Rnu --exclude=.git .
 "write and make
 nnoremap <silent> <F5> :w \| silent make!<CR>
 
+"write to a read-only file
+command! WriteSudo w !sudo tee > /dev/null %
+
 "tag window
 nnoremap <silent> <F10> :call ToggleTagWindow()<CR>
 inoremap <silent> <expr> <F10> "\<ESC>:call ToggleTagWindow()\<CR>a"
@@ -425,4 +428,11 @@ augroup MyAutocmds
     "----------------------
     "run in repl
     autocmd! FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
+
+
+    "----------------------
+    "---------sml----------
+    "----------------------
+    "load in repl
+    autocmd! FileType sml nnoremap <silent> <buffer> <leader>repl :!sml %<CR>
 augroup END
