@@ -8,7 +8,7 @@
 # 
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!  
 
-set $mod Mod1 
+set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font 
 # is used in the bar {} block below.  font pango:monospace 10 
@@ -199,7 +199,7 @@ bindsym $mod+Right exec rhythmbox-client --next
 bindsym $mod+Up exec rhythmbox-client --volume-up
 bindsym $mod+Down exec rhythmbox-client --volume-down
 
-bindsym $mod+mod4+l exec i3lock
+bindsym mod1+mod4+l exec i3lock
 #bindsym $mod+t exec /usr/local/bin/ToggleTouchpad.sh
 bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
 bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
