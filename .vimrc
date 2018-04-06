@@ -34,8 +34,8 @@ set scrolloff=9999
 let $BASH_ENV = "~/.bashrc"
 
 "tab stuff
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 
 "indent at same level as last line
@@ -237,6 +237,64 @@ vnoremap <silent> <leader>cc :<C-U>call AddComment(1)<CR>
 nnoremap <silent> <leader>cu :<C-U>call RemoveComment(0)<CR>
 vnoremap <silent> <leader>cu :<C-U>call RemoveComment(1)<CR>
 
+function! AddTwoPartComment(from_visual, open_comment, end_comment)
+    let vcount = v:count
+    if !a:from_visual
+        normal! ma
+    endif
+    let command = ":"
+    if a:from_visual
+        let command = command . "'<,'>"
+    else
+        let command = command . "."
+        if vcount && vcount > 1
+            let command = command . ",+" . string(min([(vcount - 1), (line('$') - line('.'))]))
+        endif
+    endif
+    let command = command . "norm I" . a:open_comment . "\<ESC>A" . a:end_comment
+    exe command
+    if a:from_visual
+        normal! gv
+    else
+        normal! `a
+    endif
+    exe "normal! " . string(len(a:open_comment)) . "l"
+endfunction
+
+function! RemoveTwoPartComment(from_visual, open_comment, end_comment)
+    let vcount = v:count
+    if !a:from_visual
+        normal! ma
+    endif
+    let command = ":"
+    if a:from_visual
+        let command = command . "'<,'>"
+    else
+        let command = command . "."
+        if vcount && vcount > 1
+            let command = command . ",+" . string(min([(vcount - 1), (line('$') - line('.'))]))
+        endif
+    endif
+    let cs = len(a:open_comment)
+    let open_com = substitute(a:open_comment, "/", "\\\\/", "g")
+    let open_com = substitute(open_com, "*", "\\\\*", "g")
+    let end_com = substitute(a:end_comment, "/", "\\\\/", "g")
+    let end_com = substitute(end_com, "*", "\\\\*", "g")
+    let pos = col('.')
+    let ll = len(getline('.'))
+    let offset = min([(ll-pos), cs])
+    let command = command . "s/^\\(\\s*\\)" . open_com . "\\(.*\\)" . end_com . "$" . "/\\1\\2/"
+    silent exe command
+    if a:from_visual
+       normal! gv
+    else
+        normal! `a
+    endif
+    if offset > 0
+        exe "normal! " . string(offset) . "h"
+    endif
+endfunction
+
 function! GetComment()
     let comments = {"vim": "\"", "python": "# ", "sql": "--", "javascript": "//", "java": "//", "c": "//",}
     if has_key(comments, &ft)
@@ -365,6 +423,10 @@ augroup MyAutocmds
     "resize windows when vim is resized
     autocmd VimResized * wincmd =
 
+    "different tab sizes
+    autocmd FileType python set softtabstop=4
+    autocmd FileType python set shiftwidth=4
+
     "----------------------
     "---------html---------
     "----------------------
@@ -412,10 +474,10 @@ augroup MyAutocmds
     "autocmd FileType sql nnoremap <buffer> <leader>rn :!RunQuery.sh dbname % file.csv
 
     "----------------------
-    "-----------c----------
+    "----------c-----------
     "----------------------
     "make sure headers are classified as c files and not cpp files
-    autocmd! BufRead,BufNewFile *.h set filetype=c
+    autocmd BufRead,BufNewFile *.h set filetype=c
     "compile
     autocmd FileType c nnoremap <silent> <buffer> <leader>mk :!clear<CR><CR>:!gcc %<CR>
     "run program
@@ -424,15 +486,23 @@ augroup MyAutocmds
     autocmd FileType c nnoremap <silent> <buffer> <leader>Rn :!clear<CR><CR>:!valgrind ./a.out \| less<CR>
 
     "----------------------
-    "-----------c----------
+    "-------scheme---------
     "----------------------
-    "run in repl
-    autocmd! FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
+    "run in rep
+    autocmd FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
 
 
     "----------------------
     "---------sml----------
     "----------------------
     "load in repl
-    autocmd! FileType sml nnoremap <silent> <buffer> <leader>repl :!sml %<CR>
+    autocmd FileType sml nnoremap <silent> <buffer> <leader>repl :!sml %<CR>
+    "comment
+    autocmd FileType sml vnoremap <buffer> <leader>cc :<C-U>call AddTwoPartComment(1, "(* ", " *)")<CR>
+    autocmd FileType sml nnoremap <buffer> <leader>cc :<C-U>call AddTwoPartComment(0, "(* ", " *)")<CR>
+    "uncomment
+    autocmd FileType sml vnoremap <buffer> <leader>cu :<C-U>call RemoveTwoPartComment(1, "(* ", " *)")<CR>
+    autocmd FileType sml nnoremap <buffer> <leader>cu :<C-U>call RemoveTwoPartComment(0, "(* ", " *)")<CR>
+    autocmd FileType sml inoremap <silent> <buffer> <NUL><NUL> \|<TAB>
+
 augroup END
