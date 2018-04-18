@@ -105,9 +105,13 @@ nnoremap s/ s/\v
 nnoremap <leader>db :%g/\v^\s*$/d<CR>
 vnoremap <leader>db :g/\v^\s*$/d<CR>
 
-"trim Lines
+"trim lines at front and end
 nnoremap <leader>tr :%s/\v(^\s+)\|(\s+$)//g<CR>
 vnoremap <leader>tr :s/\v(^\s+)\|(\s+$)//g<CR>
+
+"trim lines at end
+nnoremap <leader>te :%s/\v(\s+$)//<CR>
+vnoremap <leader>te :s/\v(\s+$)//<CR>
 
 "create/update tags
 command! MakeTags !ctags -Rnu --exclude=.git .
@@ -443,7 +447,7 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.js 0r $HOME/.vim/.skeleton.js
     "run program
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!nodejs %<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!nodejs %<CR>
     "run program and pipe to less
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
     "tern jump to definition
@@ -454,10 +458,8 @@ augroup MyAutocmds
     "----------------------
     "--------python--------
     "----------------------
-    "open repl and import current file
-    autocmd FileType python nnoremap <silent> <buffer> <leader>repl :!clear <CR><CR>:!python3 -i %<CR>
-    "run program
-    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!python3 %<CR>
+    "run program in repl
+    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!python3 -i %<CR>
     "run program and pipe output to less
     autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
     "insert instance variables
@@ -476,10 +478,12 @@ augroup MyAutocmds
     "----------------------
     "----------c-----------
     "----------------------
+    "skeleton
+    autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
     "make sure headers are classified as c files and not cpp files
     autocmd BufRead,BufNewFile *.h set filetype=c
     "compile
-    autocmd FileType c nnoremap <silent> <buffer> <leader>mk :!clear<CR><CR>:!gcc %<CR>
+    autocmd FileType c nnoremap <silent> <buffer> <leader>mk :!clear<CR><CR>:w<CR> :!gcc %<CR>
     "run program
     autocmd FileType c nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
     "run program and pipe to less
@@ -489,7 +493,7 @@ augroup MyAutocmds
     "-------scheme---------
     "----------------------
     "run in rep
-    autocmd FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:!csi %<CR>
+    autocmd FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!csi %<CR>
 
 
     "----------------------
