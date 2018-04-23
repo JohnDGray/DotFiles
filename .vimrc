@@ -447,9 +447,9 @@ augroup MyAutocmds
     "skeleton
     autocmd BufNewFile *.js 0r $HOME/.vim/.skeleton.js
     "run program
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!nodejs %<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:w<CR>:!nodejs %<CR>
     "run program and pipe to less
-    autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!nodejs % \| less<CR>
+    autocmd FileType javascript nnoremap <silent> <buffer> <leader>Rn :!clear<CR><CR>:!nodejs % \| less<CR>
     "tern jump to definition
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>d :TernDef<Cr>
     "tern documentation
@@ -459,21 +459,11 @@ augroup MyAutocmds
     "--------python--------
     "----------------------
     "run program in repl
-    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!python3 -i %<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:w<CR>:!python3 -i %<CR>
     "run program and pipe output to less
-    autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear <CR><CR>:!python3 % \| less<CR>
+    autocmd FileType python nnoremap <silent> <buffer> <leader>Rn :!clear<CR><CR>:!python3 % \| less<CR>
     "insert instance variables
-    "autocmd FileType python noremap <silent> <buffer> <leader>va :call PythonInstanceVars()<CR>
-    "fold by indentation
     autocmd FileType python setlocal foldmethod=indent
-
-    "----------------------
-    "---------sql----------
-    "----------------------
-    "try script
-    "autocmd FileType sql nnoremap <buffer> <leader>t :!psql <<<dbname>>> -f %<CR>
-    "run script
-    "autocmd FileType sql nnoremap <buffer> <leader>rn :!RunQuery.sh dbname % file.csv
 
     "----------------------
     "----------c-----------
@@ -483,7 +473,7 @@ augroup MyAutocmds
     "make sure headers are classified as c files and not cpp files
     autocmd BufRead,BufNewFile *.h set filetype=c
     "compile
-    autocmd FileType c nnoremap <silent> <buffer> <leader>mk :!clear<CR><CR>:w<CR> :!gcc %<CR>
+    autocmd FileType c nnoremap <silent> <buffer> <leader>mk :!clear<CR><CR>:w<CR>:!gcc %<CR>
     "run program
     autocmd FileType c nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:!valgrind ./a.out<CR>
     "run program and pipe to less
@@ -493,7 +483,7 @@ augroup MyAutocmds
     "-------scheme---------
     "----------------------
     "run in rep
-    autocmd FileType scheme nnoremap <silent> <buffer> <leader>rn :!clear <CR><CR>:w<CR> :!csi %<CR>
+    autocmd FileType scheme nnoremap <buffer> <leader>rn :w<CR>:!clear<CR><CR>:!csi %<CR>
 
 
     "----------------------
