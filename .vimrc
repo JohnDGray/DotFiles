@@ -8,7 +8,7 @@ set backspace=indent,eol,start
 set noerrorbells visualbell t_vb=
 
 "manage plugins
-execute pathogen#infect()
+"execute pathogen#infect()
 
 "leader
 let mapleader = "\<SPACE>"
@@ -31,7 +31,7 @@ set scrolloff=9999
 
 "use bash aliases so that 'python' = python3
 "let $BASH_ENV = "~/.bash_aliases"
-let $BASH_ENV = "~/.bashrc"
+"let $BASH_ENV = "~/.bashrc"
 
 "tab stuff
 set softtabstop=2
@@ -96,6 +96,9 @@ let g:netrw_liststyle=3
 "-------------------Section-------------------
 "------------------Shortcuts------------------
 "---------------------------------------------
+
+"toggle Codi
+nnoremap <leader>rr :Codi!!<CR>
 
 "always use very magic
 nnoremap / /\v
@@ -396,17 +399,6 @@ endfunction
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
 
 "---------------------------------------------
 "-------------------Section-------------------
