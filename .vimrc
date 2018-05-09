@@ -54,7 +54,7 @@ set laststatus=2
 set statusline+=%n\ %F
 set statusline+=%=
 "include working directoryin status line
-set statusline+=%{getcwd()}
+"set statusline+=%{getcwd()}
 
 "highlighting
 "highlight search matches as I type
