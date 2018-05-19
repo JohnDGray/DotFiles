@@ -426,8 +426,6 @@ augroup MyAutocmds
     "----------------------
     "---------html---------
     "----------------------
-    "skeleton
-    autocmd BufNewFile *.html 0r $HOME/.vim/.skeleton.html
     "complete tag
     autocmd FileType html inoremap <silent> <buffer> <NUL> </<C-x><C-o><Down><CR>
     autocmd FileType html inoremap <silent> <buffer> <C-f> <ESC>/><CR>a
@@ -436,8 +434,6 @@ augroup MyAutocmds
     "----------------------
     "------javascript------
     "----------------------
-    "skeleton
-    autocmd BufNewFile *.js 0r $HOME/.vim/.skeleton.js
     "run program
     autocmd FileType javascript nnoremap <silent> <buffer> <leader>rn :!clear<CR><CR>:w<CR>:!nodejs %<CR>
     "run program and pipe to less
@@ -460,8 +456,6 @@ augroup MyAutocmds
     "----------------------
     "----------c-----------
     "----------------------
-    "skeleton
-    autocmd BufNewFile *.c 0r $HOME/.vim/.skeleton.c
     "make sure headers are classified as c files and not cpp files
     autocmd BufRead,BufNewFile *.h set filetype=c
     "compile
