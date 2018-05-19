@@ -196,8 +196,9 @@ bindsym $mod+b exec --no-startup-id firefox
 bindsym $mod+m exec rhythmbox-client --play-pause
 bindsym $mod+Left exec rhythmbox-client --previous
 bindsym $mod+Right exec rhythmbox-client --next 
-bindsym $mod+Up exec rhythmbox-client --volume-up
-bindsym $mod+Down exec rhythmbox-client --volume-down
+bindsym $mod+Up exec amixer -q set Master 4%+ unmute
+bindsym $mod+Down exec amixer -q set Master 4%- unmute
+bindsym mod1+mod4+m exec amixer -q set Master mute
 
 bindsym mod1+mod4+l exec i3lock
 #bindsym $mod+t exec /usr/local/bin/ToggleTouchpad.sh
