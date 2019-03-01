@@ -1,5 +1,5 @@
 #turn off flow control
-stty -ixon
+#stty -ixon
 
 #custom prompt
 PS1="\[\033[1;32m\]<\W>$ \[\033[0;37m\]"
@@ -25,4 +25,5 @@ alias python=python3
 #fi
 
 #source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
-source "$HOME/.vim/pack/default/start/gruvbox/gruvbox_256palette.sh"
+#source "$HOME/.vim/pack/default/start/gruvbox/gruvbox_256palette.sh"
+source "$HOME/.vim/pack/my-plugins/start/gruvbox/gruvbox_256palette.sh"
