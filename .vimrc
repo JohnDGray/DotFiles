@@ -194,7 +194,8 @@ function! GetDocs()
     let ss = ss . expand("<cword>")
 
     "Open a new firefox instance (you should create a second profile and use it instead of 'alt'):
-    exe 'silent !firefox -P alt ' . '"' . ss . '"' . ' &'
+    "exe 'silent !firefox -P alt ' . '"' . ss . '"' . ' &'
+    exe 'silent !qutebrowser --target window ' . '"' . ss . '"' . ' &'
 
     ""Use an existing firefox instance:
     "exe 'silent !firefox ' . '"' . ss . '"' . ' &'
@@ -399,6 +400,12 @@ endfunction
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+let g:codi#interpreters = {
+      \ 'python': {
+        \ 'bin': 'python3',
+        \ },
+      \ }
 
 "---------------------------------------------
 "-------------------Section-------------------
