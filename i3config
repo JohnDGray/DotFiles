@@ -192,6 +192,7 @@ bar {
 client.focused #1d2021 #1d2021 #ffffff #458588 #1d2021
 
 bindsym $mod+b exec --no-startup-id firefox
+bindsym $mod+q exec qutebrowser
 
 bindsym $mod+m exec rhythmbox-client --play-pause
 bindsym $mod+Left exec rhythmbox-client --previous
@@ -206,8 +207,11 @@ bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
 bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
 
 #exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/AtkinsonGrimshaw/Grimshaw1.jpg'
-#exec --no-startup-id i3-msg 'exec compton -b'
-exec --no-startup-id i3-msg 'workspace $workspace1; exec firefox'
+exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
+exec --no-startup-id i3-msg 'exec compton -b'
+
+#exec --no-startup-id i3-msg 'workspace $workspace1; exec firefox'
+exec --no-startup-id i3-msg 'workspace $workspace1; exec qutebrowser'
 exec --no-startup-id i3-msg 'workspace $workspace2; exec i3-sensible-terminal'
 exec --no-startup-id i3-msg 'exec start-pulseaudio-x11'
 #exec --no-startup-id i3-msg 'exec scid'
