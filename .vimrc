@@ -134,10 +134,34 @@ if has('langmap') && exists('+langremap')
   set nolangremap
 endif
 
+"---------------------------------------------------------------
+"--------------------------My Settings--------------------------
+"---------------------------------------------------------------
 "color scheme and syntax highlighting stuff
 "syntax enable
-set background=dark
-let g:gruvbox_contrast_dark="hard"
-colorscheme desert
-colorscheme gruvbox
-hi Normal ctermbg=NONE
+if filereadable(expand("$HOME") . "/.vim/pack/my-plugins/start/gruvbox/gruvbox_256palette.sh")
+  set background=dark
+  "let g:gruvbox_contrast_dark="hard"
+  colorscheme gruvbox
+  hi Normal ctermbg=NONE
+else
+  colorscheme elflord
+endif
+
+"shut up vim
+set noerrorbells visualbell t_vb=
+
+"tab stuff
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+augroup MyAutocmds
+  au!
+
+  "autocmd GUIEnter * set noerrorbells visualbell t_vb=
+
+  "python tab stuff
+  autocmd FileType python set softtabstop=4
+  autocmd FileType python set shiftwidth=4
+augroup END
