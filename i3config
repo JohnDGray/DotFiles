@@ -210,8 +210,7 @@ bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
 exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
 exec --no-startup-id i3-msg 'exec compton -b'
 
-#exec --no-startup-id i3-msg 'workspace $workspace1; exec firefox'
-exec --no-startup-id i3-msg 'workspace $workspace1; exec qutebrowser'
+exec --no-startup-id i3-msg 'workspace $workspace1; exec firefox'
 exec --no-startup-id i3-msg 'workspace $workspace2; exec i3-sensible-terminal'
 exec --no-startup-id i3-msg 'exec start-pulseaudio-x11'
 #exec --no-startup-id i3-msg 'exec scid'
