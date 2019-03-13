@@ -137,9 +137,13 @@ endif
 "---------------------------------------------------------------
 "--------------------------My Settings--------------------------
 "---------------------------------------------------------------
+
+"---------------------------------------------------------------
+"----------------------------General----------------------------
+"---------------------------------------------------------------
 "color scheme and syntax highlighting stuff
 "syntax enable
-if filereadable(expand("$HOME") . "/.vim/pack/my-plugins/start/gruvbox/gruvbox_256palette.sh")
+if isdirectory(expand("$HOME") . "/.vim/pack/my-plugins/start/gruvbox")
   set background=dark
   "let g:gruvbox_contrast_dark="hard"
   colorscheme gruvbox
@@ -156,10 +160,52 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 
+"make splitting more natural
+set splitbelow
+set splitright
+
+"status line
+"always show status
+set laststatus=2
+"include buffer number and file name in status line
+set statusline+=%n\ %F
+set statusline+=%=
+
+"highlighting
+"highlight all search matches
+set hlsearch
+"turn off hlsearch when redrawing
+nnoremap <C-l> :nohlsearch<CR><C-l>
+
+"show line numbers
+set number
+
+
+"-----------------------------------------------------------------
+"---------------------------Shortcuts-----------------------------
+"-----------------------------------------------------------------
+"use very magic and ignore case
+nnoremap / /\v\c
+
+"-----------------------------------------------------------------
+"---------------------------Plugins------------------------------
+"-----------------------------------------------------------------
+if isdirectory(expand("$HOME") . "/.vim/pack/my-plugins/start/vim-snippets/UltiSnips")
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+endif
+
+"-----------------------------------------------------------------
+"-------------------------Auto Commands---------------------------
+"-----------------------------------------------------------------
 augroup MyAutocmds
   au!
 
   "autocmd GUIEnter * set noerrorbells visualbell t_vb=
+
+  "resize windows when vim is resized
+  autocmd VimResized * wincmd =
 
   "python tab stuff
   autocmd FileType python set softtabstop=4
