@@ -160,6 +160,9 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 
+"indent at same level as last line
+set autoindent
+
 "make splitting more natural
 set splitbelow
 set splitright
@@ -210,4 +213,6 @@ augroup MyAutocmds
   "python tab stuff
   autocmd FileType python set softtabstop=4
   autocmd FileType python set shiftwidth=4
+
+  autocmd BufRead *.html set filetype+=.javascript
 augroup END
