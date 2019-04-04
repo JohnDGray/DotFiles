@@ -141,6 +141,9 @@ endif
 "---------------------------------------------------------------
 "----------------------------General----------------------------
 "---------------------------------------------------------------
+
+let mapleader="\<SPACE>"
+
 "color scheme and syntax highlighting stuff
 "syntax enable
 if isdirectory(expand("$HOME") . "/.vim/pack/my-plugins/start/gruvbox")
