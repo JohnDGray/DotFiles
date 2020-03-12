@@ -194,29 +194,35 @@ client.focused #1d2021 #1d2021 #ffffff #458588 #1d2021
 bindsym $mod+b exec --no-startup-id firefox
 bindsym $mod+q exec qutebrowser
 
-bindsym $mod+Left move workspace to output left
-bindsym $mod+Right move workspace to output right
+#bindsym $mod+Left move workspace to output left
+#bindsym $mod+Right move workspace to output right
 
-#bindsym $mod+m exec rhythmbox-client --play-pause
+bindsym $mod+m exec dbus-send --type=method_call --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+
+bindsym $mod+Left exec dbus-send --type=method_call --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
+
+bindsym $mod+Right exec dbus-send --type=method_call --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
+
 #bindsym $mod+Left exec rhythmbox-client --previous
 #bindsym $mod+Right exec rhythmbox-client --next 
-bindsym $mod+Up exec amixer -q set Master 4%+ unmute
-bindsym $mod+Down exec amixer -q set Master 4%- unmute
+bindsym $mod+Up exec amixer -q set Master 4%+ unmute; exec amixer -q set Headphone unmute; exec amixer -q set Front unmute;
+bindsym $mod+Down exec amixer -q set Master 4%- unmute; exec amixer -q set Headphone unmute; exec amixer -q set Front unmute;
 bindsym mod1+mod4+m exec amixer -q set Master mute
 
 bindsym mod1+mod4+l exec i3lock
 #bindsym $mod+t exec /usr/local/bin/ToggleTouchpad.sh
-bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
-bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
+#bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
+#bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
 
 #exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/AtkinsonGrimshaw/Grimshaw1.jpg'
-exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
-exec --no-startup-id i3-msg 'exec compton -b'
+#exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
+#exec --no-startup-id i3-msg 'exec compton -b'
 
 exec --no-startup-id i3-msg 'workspace $workspace1; exec i3-sensible-terminal'
 exec --no-startup-id i3-msg 'workspace $workspace2; exec firefox'
 exec --no-startup-id i3-msg 'workspace $workspace3; exec i3-sensible-terminal'
 exec --no-startup-id i3-msg 'exec start-pulseaudio-x11'
+exec --no-startup-id i3-msg 'workspace $workspace10; exec spotify'
 #exec --no-startup-id i3-msg 'exec scid'
 #exec --no-startup-id i3-msg 'exec rhythmbox'
 #exec --no-startup-id i3-msg 'exec rhythmbox-client --volume-down'
