@@ -32,6 +32,7 @@ new_window pixel 1
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+p exec "gnome-terminal -- bash -c 'python3; exec bash;'"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -214,9 +215,9 @@ bindsym mod1+mod4+l exec i3lock
 #bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
 #bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
 
-#exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/AtkinsonGrimshaw/Grimshaw1.jpg'
+exec --no-startup-id i3-msg 'exec feh --bg-fill /home/myname/Pictures/Wallpapers/Architecture/TrinityCollege.jpg'
 #exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
-#exec --no-startup-id i3-msg 'exec compton -b'
+exec --no-startup-id i3-msg 'exec compton -b'
 
 exec --no-startup-id i3-msg 'workspace $workspace1; exec i3-sensible-terminal'
 exec --no-startup-id i3-msg 'workspace $workspace2; exec firefox'
