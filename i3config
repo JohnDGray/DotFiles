@@ -215,8 +215,7 @@ bindsym mod1+mod4+l exec i3lock
 #bindsym $mod+t exec /usr/local/bin/DisableTouchpad.sh
 #bindsym $mod+Shift+t exec /usr/local/bin/EnableTouchpad.sh
 
-exec --no-startup-id i3-msg 'exec feh --bg-fill /home/myname/Pictures/Wallpapers/Architecture/TrinityCollege.jpg'
-#exec --no-startup-id i3-msg 'exec feh --bg-fill ~/Pictures/Grimshaw_TheLadyOfShalott.jpg'
+exec --no-startup-id i3-msg 'exec feh --bg-fill /home/myname/.config/Wallpaper'
 exec --no-startup-id i3-msg 'exec compton -b'
 
 exec --no-startup-id i3-msg 'workspace $workspace1; exec i3-sensible-terminal'
