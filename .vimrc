@@ -218,4 +218,16 @@ augroup MyAutocmds
   autocmd FileType python set shiftwidth=4
 
   autocmd BufRead *.html set filetype+=.javascript
+
+  "python run file
+  if !system('which ipython3 >> /dev/null; echo $?;')
+    autocmd FileType python nnoremap <leader>ppt :!ipython3 -i %<CR>
+    autocmd FileType python nnoremap <leader>ppi :!ipython3<CR>
+  else
+    autocmd FileType python nnoremap <leader>ppt :!python3 -i %<CR>
+    autocmd FileType python nnoremap <leader>ppi :!python3<CR>
+  endif
+
+  autocmd FileType python nnoremap <leader>ppl :!python3 % \| less<CR>
+
 augroup END
