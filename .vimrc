@@ -230,4 +230,7 @@ augroup MyAutocmds
 
   autocmd FileType python nnoremap <leader>ppl :!python3 % \| less<CR>
 
+  autocmd FileType cpp nnoremap <leader>c :!g++ %<CR>
+  autocmd FileType cpp nnoremap <leader>r :!./a.out<CR>
+
 augroup END
