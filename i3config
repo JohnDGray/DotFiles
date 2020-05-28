@@ -192,7 +192,7 @@ bar {
 
 client.focused #1d2021 #1d2021 #ffffff #458588 #1d2021
 
-# bindsym $mod+b exec --no-startup-id firefox
+bindsym $mod+b exec --no-startup-id firefox
 # bindsym $mod+b exec i3-sensible-terminal -- elinks
 # bindsym $mod+q exec qutebrowser
 
