@@ -233,4 +233,6 @@ augroup MyAutocmds
   autocmd FileType cpp nnoremap <leader>c :!g++ %<CR>
   autocmd FileType cpp nnoremap <leader>r :!./a.out<CR>
 
+  autocmd FileType sml setlocal commentstring=(*\ %s\ *)
+
 augroup END
