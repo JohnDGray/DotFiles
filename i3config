@@ -192,7 +192,7 @@ bar {
 
 client.focused #1d2021 #1d2021 #ffffff #458588 #1d2021
 
-# bindsym $mod+b exec --no-startup-id firefox
+bindsym $mod+b exec --no-startup-id firefox
 # bindsym $mod+b exec i3-sensible-terminal -- elinks
 # bindsym $mod+q exec qutebrowser
 
@@ -221,7 +221,7 @@ exec --no-startup-id i3-msg 'exec feh --bg-fill /home/myname/.config/Wallpaper'
 exec --no-startup-id i3-msg 'exec compton -b'
 
 exec --no-startup-id i3-msg 'workspace $workspace1; exec i3-sensible-terminal'
-# exec --no-startup-id i3-msg 'workspace $workspace2; exec firefox'
+exec --no-startup-id i3-msg 'workspace $workspace2; exec firefox'
 # exec --no-startup-id i3-msg 'workspace $workspace3; exec i3-sensible-terminal'
 # exec --no-startup-id i3-msg 'workspace $workspace9; exec i3-sensible-terminal -- ranger'
 exec --no-startup-id i3-msg 'exec start-pulseaudio-x11'
